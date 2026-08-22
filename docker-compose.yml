@@ -1,0 +1,22 @@
+services:
+  web:
+    build: .
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+    environment:
+      - NODE_ENV=development
+    command: npm run dev
+
+  test:
+    build: .
+    working_dir: /app
+    volumes:
+      - ./:/app
+      - node_modules:/app/node_modules
+    command: sh -c "npm install --no-audit --no-fund && npm test -- --run"
+
+volumes:
+  node_modules: {}

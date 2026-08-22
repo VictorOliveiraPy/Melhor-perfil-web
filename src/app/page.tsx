@@ -1,0 +1,34 @@
+export default function Home() {
+  return (
+    <main className="hero-page">
+      <section className="hero-card">
+        <p className="eyebrow">Pegue o número #1 por</p>
+        <h1>Valor do lance em reais</h1>
+        <p className="lead-line">R$ 1.008+</p>
+        <p className="lead">
+          Cole o link do seu perfil ou @seuarroba e suba no ranking. Já está na lista? Cola o mesmo link e aumenta o lance.
+        </p>
+
+        <div className="hero-actions">
+          <a href="/board" className="primary-button">Ver o board</a>
+          <a href="/board" className="secondary-button">Entrar no ranking</a>
+        </div>
+
+        <div className="stats-grid">
+          <div>
+            <strong>43</strong>
+            <span>pessoas online agora</span>
+          </div>
+          <div>
+            <strong>5.926</strong>
+            <span>visitantes / 24h</span>
+          </div>
+          <div>
+            <strong>13.687</strong>
+            <span>pageviews / 24h</span>
+          </div>
+        </div>
+      </section>
+    </main>
+  )
+}
