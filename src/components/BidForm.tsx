@@ -27,12 +27,15 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
 
   return (
     <form className="bid-form" onSubmit={(event) => event.preventDefault()} aria-label="Formulário de lance">
-      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+      <div className="bid-form-header" style={{ justifyContent: 'space-between' }}>
         <div className="platform-badge" aria-hidden>
-          {platform === 'instagram' ? <InstagramIcon /> : <LinkedInIcon />}
-          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text)' }}>{platform === 'instagram' ? 'Instagram' : 'LinkedIn'}</span>
+          {platform === 'instagram' ? <InstagramIcon size={16} /> : <LinkedInIcon size={16} />}
+          <span className="preview-label">{platform === 'instagram' ? 'Instagram' : 'LinkedIn'}</span>
         </div>
-        <div style={{ fontSize: '0.86rem', color: 'var(--muted)' }}>Valor atual: <strong style={{ color: 'var(--accent)' }}>{formatCurrency(currentBidCents)}</strong></div>
+        <div className="preview-row" style={{ alignItems: 'center' }}>
+          <div className="preview-label">Valor atual:</div>
+          <div className="preview-value">{formatCurrency(currentBidCents)}</div>
+        </div>
       </div>
       <div className="field-group">
         <label htmlFor="display-name">Nome de exibição</label>

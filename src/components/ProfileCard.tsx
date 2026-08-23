@@ -34,7 +34,7 @@ export default function ProfileCard({
   const platformLabel = platform === 'linkedin' ? 'LinkedIn' : platform === 'instagram' ? 'Instagram' : ''
 
   return (
-    <div className="profile-info">
+    <div className="profile-info listing-card">
       <div className="profile-row">
         <div className="rank-pill" aria-hidden>
           #{rank || '—'}
