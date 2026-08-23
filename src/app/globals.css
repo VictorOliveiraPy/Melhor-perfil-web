@@ -1,22 +1,24 @@
 :root {
-  /* Paleta inspirada no melhorlance.dev, adaptada para perfis */
-  /* Light theme tokens inspired by melhorlance.dev */
-  --bg: #f5f5f6;
-  --bg-strong: #efeff0;
+  /* Tokens extraídos do CSS compilado de melhorlance.dev (--color-*), mapeados
+     1:1 pros nomes que já usamos aqui. Ver commit 3da259d pro histórico da
+     migração de tema; esta leva corrige os valores que ainda eram aproximação
+     (opacidade sobre preto) em vez do cinza sólido real do site de referência. */
+  --bg: #efeeee;
   --panel: #ffffff;
   --card: #ffffff;
-  --line: rgba(16,16,16,0.06);
-  --text: #111111;
-  --muted: rgba(17,17,17,0.56);
+  --line: #e1dfe2;
+  --text: #131215;
+  --muted: #6b6873;
   --accent: #5b4bdb;
   --accent-hover: #4a3ac0;
   --accent-link: #5240c9;
   --accent-tonal-bg: #f6f4ff;
   --accent-tonal-badge: #ece7ff;
   --accent-tonal-border: #b9adf5;
-  --danger: #f76b6b;
-  --shadow: rgba(2, 6, 23, 0.6);
-  --shadow-lg: 0 20px 50px rgba(2,6,23,0.5);
+  /* Rosa/magenta usado só no gradiente do valor do lance (--quente ->
+     --accent), espelhando .gradient-amount do site de referência. */
+  --quente: #c0398f;
+  --danger: #c0398f;
 
   /* Layout tokens */
   --radius-sm: 8px;
@@ -65,7 +67,7 @@ body {
   margin: 0;
   font-family: var(--font-sans);
   font-weight: 400;
-  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-strong) 100%);
+  background: var(--bg);
   color: var(--text);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
@@ -227,7 +229,13 @@ textarea {
   gap: 6px;
   font-weight: 900;
   letter-spacing: -0.08em;
-  color: var(--accent);
+  /* Espelha .gradient-amount do melhorlance.dev: texto em gradiente
+     rosa -> roxo via background-clip, não cor sólida. */
+  background-image: linear-gradient(96deg, var(--quente), var(--accent));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
 }
 
 .price-display .currency {
