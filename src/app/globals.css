@@ -563,6 +563,18 @@ textarea {
   font-size: 0.74rem;
 }
 
+/* Small utilities for bid-form components */
+.bid-form-header { display:flex; align-items:center; gap:10px }
+.bid-form-title { font-weight:800; font-size:0.95rem }
+.field-input { width:100%; padding:10px 12px; border-radius:10px; border:1px solid rgba(255,255,255,0.08); background: rgba(255,255,255,0.02); color:var(--text) }
+.preview-row { display:flex; justify-content:space-between; align-items:center; gap:8px; padding-top:6px }
+.preview-label { color:var(--muted); font-size:0.78rem }
+.preview-value { font-weight:800; color:var(--accent) }
+.actions { text-align:right }
+.btn { display:inline-flex; align-items:center; justify-content:center; padding:10px 14px; border-radius:12px; cursor:pointer; font-weight:800 }
+.btn-primary { background: linear-gradient(90deg,var(--accent-2),var(--accent)); color:#0b0b0b }
+
+
 .preview-box strong {
   color: var(--text);
   font-size: 0.9rem;
@@ -925,7 +937,6 @@ textarea {
   color: var(--text);
   background: rgba(255,255,255,0.02);
   border: 1px solid rgba(255,255,255,0.04);
-}
 }
 
 .primary-button:hover,
