@@ -34,6 +34,11 @@ export default function Home() {
             <span>lance inicial no topo</span>
           </div>
         </div>
+
+        <div className="micro-highlight">
+          <span className="micro-dot" />
+          Ranking pensado para quem quer crescer visibilidade com autoridade.
+        </div>
       </section>
     </main>
   )
