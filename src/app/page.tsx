@@ -30,19 +30,17 @@ export default function Home() {
         Já está na lista? Cola o mesmo link e aumenta o lance. Você paga só a diferença.
       </p>
 
-      <div className="hero-stats">
-        <div>
+      {/* Dois boards independentes (spec.md seção 1) — cada card leva pro
+          ranking daquela plataforma, não existe um "board" misto pra linkar. */}
+      <div className="hero-stats hero-stats-links">
+        <a href="/instagram">
           <strong>Instagram</strong>
           <span>perfil pessoal</span>
-        </div>
-        <div>
+        </a>
+        <a href="/linkedin">
           <strong>LinkedIn</strong>
           <span>perfil profissional</span>
-        </div>
-        <div>
-          <strong>Board</strong>
-          <span>ranking público</span>
-        </div>
+        </a>
       </div>
 
       <section className="brand-strip" aria-label="Resumo do produto">

@@ -21,9 +21,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </div>
             <nav aria-label="Navegação principal">
               <a href="/">Início</a>
-              <a href="/board">Board</a>
-              <a href="/board">Instagram</a>
-              <a href="/board">LinkedIn</a>
+              <a href="/instagram">Instagram</a>
+              <a href="/linkedin">LinkedIn</a>
             </nav>
           </div>
         </header>

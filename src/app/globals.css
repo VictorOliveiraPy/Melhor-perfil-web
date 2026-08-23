@@ -297,12 +297,28 @@ textarea {
   max-width: 700px;
 }
 
+/* Um card por board (spec.md seção 1: dois boards independentes) — sem
+   terceiro card genérico "Board" pra linkar, já que não existe um board
+   misto. */
+.hero-stats-links {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  max-width: 460px;
+}
+
 .hero-stats div,
+.hero-stats a,
 .brand-strip div {
+  display: block;
   border: 1px solid rgba(16,16,16,0.04);
   border-radius: var(--radius-md);
   background: #fff;
   padding: 16px 18px;
+  text-decoration: none;
+  transition: border-color 0.15s ease;
+}
+
+.hero-stats a:hover {
+  border-color: var(--accent-tonal-border);
 }
 
 .hero-stats strong,

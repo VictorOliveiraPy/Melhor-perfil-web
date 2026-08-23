@@ -6,7 +6,7 @@ import BidForm from './BidForm'
 import type { BoardListing } from '../data/mockListings'
 
 type Props = {
-  listing: BoardListing
+  listing: BoardListing & { rank: number }
 }
 
 // O melhorlance.dev de referência mantém cada linha do board compacta —

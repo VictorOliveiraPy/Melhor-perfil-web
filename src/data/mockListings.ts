@@ -1,10 +1,11 @@
+export type Platform = 'instagram' | 'linkedin'
+
 export type BoardListing = {
   id: string
-  rank: number
   display_name: string
   bio: string
   currentBidCents: number
-  platform: 'instagram' | 'linkedin'
+  platform: Platform
   profileHandle: string
   profileUrl: string
   avatarUrl?: string
@@ -12,10 +13,12 @@ export type BoardListing = {
   timeLabel: string
 }
 
+// spec.md seção 1, "Dois boards independentes": cada plataforma tem seu
+// próprio ranking, então o rank não é um dado fixo aqui — é calculado por
+// board com rankListings() a partir do currentBidCents de cada plataforma.
 export const mockListings: BoardListing[] = [
   {
     id: 'lin-101',
-    rank: 1,
     display_name: 'Victor Hugo',
     bio: 'Product & growth — construindo negócios digitais',
     currentBidCents: 12800,
@@ -29,7 +32,6 @@ export const mockListings: BoardListing[] = [
   },
   {
     id: 'inst-101',
-    rank: 2,
     display_name: 'João Silva',
     bio: 'Designer & developer — Porto Alegre',
     currentBidCents: 1200,
@@ -41,7 +43,6 @@ export const mockListings: BoardListing[] = [
   },
   {
     id: 'lin-201',
-    rank: 2,
     display_name: 'Maria Souza',
     bio: 'Marketing & growth para marcas digitais',
     currentBidCents: 5000,
@@ -53,7 +54,6 @@ export const mockListings: BoardListing[] = [
   },
   {
     id: 'inst-102',
-    rank: 3,
     display_name: 'Luan Costa',
     bio: 'Conteúdo de negócios e lifestyle',
     currentBidCents: 3400,
@@ -65,7 +65,6 @@ export const mockListings: BoardListing[] = [
   },
   {
     id: 'lin-202',
-    rank: 4,
     display_name: 'Bia Rocha',
     bio: 'Product designer e UX',
     currentBidCents: 2800,
@@ -75,4 +74,19 @@ export const mockListings: BoardListing[] = [
     clicks24h: 243,
     timeLabel: 'há 1 dia',
   },
+  {
+    id: 'inst-103',
+    display_name: 'Ana Ribeiro',
+    bio: 'Fotografia e viagens pelo Brasil',
+    currentBidCents: 900,
+    platform: 'instagram',
+    profileHandle: 'ana.ribeiro',
+    profileUrl: 'https://instagram.com/ana.ribeiro',
+    clicks24h: 97,
+    timeLabel: 'há 2 dias',
+  },
 ]
+
+export function listingsByPlatform(platform: Platform): BoardListing[] {
+  return mockListings.filter((listing) => listing.platform === platform)
+}
