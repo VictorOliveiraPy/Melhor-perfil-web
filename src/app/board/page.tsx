@@ -5,9 +5,9 @@ import { mockListings } from '../../data/mockListings'
 export default function Board() {
   return (
     <main className="board-page">
-      <div className="page-header">
+      <div className="board-topbar">
         <div>
-          <p className="eyebrow">Ranking de autoridade</p>
+          <p className="eyebrow">O board</p>
           <h1>Perfis em destaque</h1>
         </div>
         <div className="board-tabs">

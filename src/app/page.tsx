@@ -1,43 +1,57 @@
 export default function Home() {
   return (
-    <main className="hero-page">
+    <main className="landing-shell">
       <section className="hero-card">
-        <p className="eyebrow">Autoridade digital</p>
-        <h1>Sua presença digital começa no topo</h1>
-        <p className="lead-line">R$ 1.008+</p>
-        <p className="lead">
-          Transforme visibilidade em reputação. O ranking mostra quem está ganhando atenção, relevância e oportunidades reais no mercado digital.
+        <p className="eyebrow">#1 por valor do lance em reais</p>
+        <h1>
+          Pegue o número #1 por
+          <span> valor do lance em reais</span>
+        </h1>
+        <p className="lead-line">R$ 1008+</p>
+
+        <div className="hero-entry-row" aria-label="Formulário de submissão do perfil">
+          <input type="text" placeholder="Cole o link do seu perfil ou @seuarroba" />
+          <button type="button" className="primary-button">Pegar o #1</button>
+        </div>
+
+        <p className="subtext">
+          Já está na lista? Cola o mesmo link e aumenta o lance. Você paga só a diferença.
         </p>
 
-        <div className="hero-actions">
-          <a href="/board" className="primary-button">Ver o ranking</a>
-          <a href="/board" className="secondary-button">Entrar no board</a>
+        <div className="proof-row" aria-label="Indicadores de tráfego">
+          <span><strong>29</strong> pessoas online agora</span>
+          <span><strong>8.307</strong> visitantes &amp; 19.131 pageviews</span>
+          <span><a href="https://www.himetrica.com/share/melhorlance.dev" target="_blank" rel="noreferrer">ver analytics →</a></span>
         </div>
 
-        <div className="proof-row" aria-label="Indicadores de autoridade">
-          <span><strong>43</strong> online agora</span>
-          <span><strong>5.926</strong> visitas / 24h</span>
-          <span><strong>13.687</strong> pageviews / 24h</span>
-        </div>
-
-        <div className="stats-grid">
+        <div className="hero-stats">
           <div>
-            <strong>#1</strong>
-            <span>visibilidade profissional</span>
+            <strong>Instagram</strong>
+            <span>perfil pessoal</span>
           </div>
           <div>
-            <strong>+18%</strong>
-            <span>engajamento por posição</span>
+            <strong>LinkedIn</strong>
+            <span>perfil ou empresa</span>
           </div>
           <div>
-            <strong>R$ 1.008</strong>
-            <span>lance inicial no topo</span>
+            <strong>Ranking</strong>
+            <span>por valor &amp; tempo</span>
           </div>
         </div>
+      </section>
 
-        <div className="micro-highlight">
-          <span className="micro-dot" />
-          Ranking pensado para quem quer crescer visibilidade com autoridade.
+      <section className="brand-strip" aria-label="Resumo do produto">
+        <div>
+          <span>Board público</span>
+          <strong>Perfis de Instagram e LinkedIn</strong>
+        </div>
+        <div>
+          <span>Visibilidade</span>
+          <strong>mais cliques, mais presença</strong>
+        </div>
+        <div>
+          <span>Pagamento</span>
+          <strong>Pix com confirmação instantânea</strong>
         </div>
       </section>
     </main>

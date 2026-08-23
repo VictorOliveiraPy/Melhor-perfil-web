@@ -2,8 +2,8 @@ import type { ReactNode } from 'react'
 import './globals.css'
 
 export const metadata = {
-  title: 'melhorperfil-web',
-  description: 'Esqueleto inicial'
+  title: 'melhorperfil',
+  description: 'Ranking público de perfis de Instagram e LinkedIn',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -11,15 +11,19 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     <html lang="pt-BR">
       <body>
         <header className="site-header">
-          <div className="container">
-            <h1 className="brand">melhorperfil</h1>
-            <nav>
+          <div className="container shell-header">
+            <div className="brand-wrap">
+              <span className="brand-mark">melhorperfil</span>
+            </div>
+            <nav aria-label="Navegação principal">
               <a href="/">Início</a>
               <a href="/board">Board</a>
+              <a href="/board">Instagram</a>
+              <a href="/board">LinkedIn</a>
             </nav>
           </div>
         </header>
-        <div className="container">{children}</div>
+        <div className="container main-shell">{children}</div>
       </body>
     </html>
   )
