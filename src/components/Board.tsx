@@ -1,5 +1,4 @@
-import BidRow from './BidRow'
-import PodiumCard from './PodiumCard'
+import BoardSection from './BoardSection'
 import { rankListings } from '../lib/rankListings'
 import { boardStats } from '../lib/boardStats'
 import type { BoardListing, Platform } from '../data/mockListings'
@@ -15,14 +14,14 @@ const PLATFORM_LABEL: Record<Platform, string> = {
   linkedin: 'LinkedIn',
 }
 
-// Board por plataforma — spec.md seção 1: "Dois boards independentes, não
-// um único board misto". /instagram e /linkedin renderizam este mesmo
-// componente, cada um só com as entradas (e o ranking) da sua plataforma.
+// Página cheia de uma plataforma — spec.md seção 1: "Dois boards
+// independentes, não um único board misto". /instagram e /linkedin
+// renderizam este mesmo componente, cada um só com as entradas (e o
+// ranking) da sua plataforma. Ver também src/app/board/page.tsx: as duas
+// plataformas lado a lado numa página só, pra quem quer ver as duas sem
+// trocar de rota — visual apenas, o ranking de cada uma continua isolado.
 export default function Board({ platform, heading, listings }: Props) {
-  const ranked = rankListings(listings)
-  const top3 = ranked.slice(0, 3)
-  const rest = ranked.slice(3)
-  const { totalClicks } = boardStats(ranked)
+  const { totalClicks } = boardStats(rankListings(listings))
 
   return (
     <main className="board-page">
@@ -41,21 +40,7 @@ export default function Board({ platform, heading, listings }: Props) {
         <span>{totalClicks.toLocaleString('pt-BR')} cliques em visibilidade</span>
       </div>
 
-      {top3.length > 0 && (
-        <div className="podium">
-          {top3.map((listing) => (
-            <PodiumCard key={listing.id} listing={listing} />
-          ))}
-        </div>
-      )}
-
-      {rest.length > 0 && (
-        <section className="board-list">
-          {rest.map((listing) => (
-            <BidRow key={listing.id} listing={listing} />
-          ))}
-        </section>
-      )}
+      <BoardSection listings={listings} />
     </main>
   )
 }

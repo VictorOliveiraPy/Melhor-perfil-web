@@ -465,6 +465,7 @@ textarea {
   border-radius: 999px;
   font-size: 0.78rem;
   font-weight: 600;
+  text-decoration: none;
 }
 
 .active-tab {
@@ -494,6 +495,21 @@ textarea {
 .board-list {
   display: grid;
   gap: 14px;
+}
+
+/* /board combinado: Instagram e LinkedIn empilhados na mesma página
+   (filtro "Todos"), cada um com seu heading próprio. */
+.board-platform-group + .board-platform-group {
+  margin-top: 36px;
+}
+
+.board-platform-heading {
+  margin: 0 0 14px;
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  color: var(--text);
 }
 
 /* Pódio dos top-3, igual ao melhorlance.dev de referência: os 3 primeiros

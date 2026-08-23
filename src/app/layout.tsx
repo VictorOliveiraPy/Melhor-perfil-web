@@ -22,6 +22,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <span className="brand-mark">melhorperfil</span>
             </a>
             <nav aria-label="Navegação principal">
+              <a href="/board">Board</a>
               <a href="/instagram">Instagram</a>
               <a href="/linkedin">LinkedIn</a>
               <a href="/analytics">Analytics</a>
