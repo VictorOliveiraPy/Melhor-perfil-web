@@ -2,6 +2,8 @@ import Link from 'next/link'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
+import { profileDetailHref } from '../lib/profileDetailHref'
+import type { Platform } from '../lib/platform'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
 type Props = {
@@ -11,7 +13,7 @@ type Props = {
   bio?: string
   currentBidCents: number
   profileUrl?: string
-  platform?: 'instagram' | 'linkedin'
+  platform?: Platform
   profileHandle?: string
   avatarUrl?: string
   clicks24h?: number
@@ -33,7 +35,7 @@ export default function ProfileCard({
 }: Props) {
   const safeName = sanitizeDisplayName(display_name)
   const safeBio = sanitizeDisplayName(bio)
-  const url = profileUrl ? normalizeProfileUrl(profileUrl) : '#'
+  const url = (profileUrl && normalizeProfileUrl(profileUrl)) || '#'
   const platformLabel = platform === 'linkedin' ? 'LinkedIn' : platform === 'instagram' ? 'Instagram' : ''
 
   return (
@@ -75,7 +77,7 @@ export default function ProfileCard({
             {id && platform && (
               <>
                 {' · '}
-                <Link href={`/${platform}/p/${id}`} className="selo-link">
+                <Link href={profileDetailHref(platform, id)} className="selo-link">
                   selo
                 </Link>
               </>

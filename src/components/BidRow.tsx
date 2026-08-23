@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import ProfileCard from './ProfileCard'
+import { profileDetailHref } from '../lib/profileDetailHref'
 import type { BoardListing } from '../data/mockListings'
 
 type Props = {
@@ -13,7 +14,7 @@ type Props = {
 // aqui: nenhuma interatividade real na linha, então Server Component
 // (ver .claude/rules/react/coding-style.md, "Server / Client Boundary").
 export default function BidRow({ listing }: Props) {
-  const seloHref = `/${listing.platform}/p/${listing.id}`
+  const seloHref = profileDetailHref(listing.platform, listing.id)
 
   return (
     <article className="listing-row card-horizontal">

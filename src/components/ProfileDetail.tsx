@@ -24,7 +24,7 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 export default function ProfileDetail({ platform, listing }: Props) {
   const safeName = sanitizeDisplayName(listing.display_name)
   const safeBio = sanitizeDisplayName(listing.bio)
-  const url = normalizeProfileUrl(listing.profileUrl)
+  const url = normalizeProfileUrl(listing.profileUrl) || '#'
   const platformLabel = PLATFORM_LABEL[platform]
 
   return (

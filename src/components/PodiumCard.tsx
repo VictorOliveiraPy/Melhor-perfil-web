@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
+import { profileDetailHref } from '../lib/profileDetailHref'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 import type { BoardListing } from '../data/mockListings'
 
@@ -14,7 +15,7 @@ type Props = {
 export default function PodiumCard({ listing }: Props) {
   const safeName = sanitizeDisplayName(listing.display_name)
   const safeBio = sanitizeDisplayName(listing.bio)
-  const seloHref = `/${listing.platform}/p/${listing.id}`
+  const seloHref = profileDetailHref(listing.platform, listing.id)
 
   return (
     <Link href={seloHref} className={`podium-card${listing.rank === 1 ? ' is-first' : ''}`}>

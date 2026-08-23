@@ -1,4 +1,4 @@
-export type Platform = 'instagram' | 'linkedin'
+import type { Platform } from './platform'
 
 /**
  * Accepts either a full profile URL or a bare "@handle" and returns a full

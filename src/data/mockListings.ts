@@ -1,4 +1,6 @@
-export type Platform = 'instagram' | 'linkedin'
+import type { Platform } from '../lib/platform'
+
+export type { Platform }
 
 export type BoardListing = {
   id: string
