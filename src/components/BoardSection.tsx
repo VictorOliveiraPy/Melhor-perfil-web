@@ -1,7 +1,7 @@
 import BidRow from './BidRow'
 import PodiumCard from './PodiumCard'
 import { rankListings } from '../lib/rankListings'
-import type { BoardListing } from '../data/mockListings'
+import type { BoardListing } from '../lib/boardListing'
 
 type Props = {
   listings: BoardListing[]
@@ -18,6 +18,14 @@ export default function BoardSection({ listings }: Props) {
   const ranked = rankListings(listings)
   const top3 = ranked.slice(0, 3)
   const rest = ranked.slice(3)
+
+  if (ranked.length === 0) {
+    return (
+      <p className="board-empty">
+        Ainda não tem ninguém neste board. Cola seu @/link no formulário aqui em cima e seja o primeiro #1.
+      </p>
+    )
+  }
 
   return (
     <>

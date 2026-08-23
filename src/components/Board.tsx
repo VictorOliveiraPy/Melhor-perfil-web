@@ -1,12 +1,12 @@
 import BoardSection from './BoardSection'
+import { fetchBoardListings } from '../services/boardApiService'
 import { rankListings } from '../lib/rankListings'
 import { boardStats } from '../lib/boardStats'
-import type { BoardListing, Platform } from '../data/mockListings'
+import type { Platform } from '../lib/platform'
 
 type Props = {
   platform: Platform
   heading: string
-  listings: BoardListing[]
 }
 
 const PLATFORM_LABEL: Record<Platform, string> = {
@@ -20,7 +20,13 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 // ranking) da sua plataforma. Ver também src/app/board/page.tsx: as duas
 // plataformas lado a lado numa página só, pra quem quer ver as duas sem
 // trocar de rota — visual apenas, o ranking de cada uma continua isolado.
-export default function Board({ platform, heading, listings }: Props) {
+//
+// Async porque busca direto do melhorperfil-api (fetchBoardListings) — sem
+// mock, sem client-only fetch (CLAUDE.md seção 1: SSR/SSG no board
+// público). Server Component async é renderizado normalmente quando
+// aninhado dentro de uma page.tsx síncrona.
+export default async function Board({ platform, heading }: Props) {
+  const listings = await fetchBoardListings(platform)
   const { totalClicks } = boardStats(rankListings(listings))
 
   return (

@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import ProfileCard from './ProfileCard'
 import { profileDetailHref } from '../lib/profileDetailHref'
-import type { BoardListing } from '../data/mockListings'
+import type { BoardListing } from '../lib/boardListing'
 
 type Props = {
   listing: BoardListing & { rank: number }

@@ -1,17 +1,23 @@
-import { listingsByPlatform } from '../../data/mockListings'
+import { fetchBoardListings } from '../../services/boardApiService'
 import { siteAnalytics } from '../../data/mockAnalytics'
 import { boardStats } from '../../lib/boardStats'
 import { formatCurrency } from '../../lib/formatCurrency'
 
 // Analytics próprio do melhorperfil — o link "ver o analytics" da home
 // linkava direto pro dashboard público do melhorlance.dev (site de
-// referência), o que não faz sentido: são produtos diferentes. Esta página
-// é a nossa versão, com os mesmos números de demonstração já usados na
-// hero (src/data/mockAnalytics.ts) e um recorte por board a partir dos
-// mesmos dados mock do board público.
-export default function Analytics() {
-  const instagramStats = boardStats(listingsByPlatform('instagram'))
-  const linkedinStats = boardStats(listingsByPlatform('linkedin'))
+// referência), o que não faz sentido: são produtos diferentes. Números de
+// tráfego do site (pessoas online, visitantes) continuam de demonstração —
+// dependem de uma integração de analytics real (Umami, spec.md seção 12)
+// que ainda não existe. O recorte por board já vem do melhorperfil-api.
+export const dynamic = 'force-dynamic'
+
+export default async function Analytics() {
+  const [instagramListings, linkedinListings] = await Promise.all([
+    fetchBoardListings('instagram'),
+    fetchBoardListings('linkedin'),
+  ])
+  const instagramStats = boardStats(instagramListings)
+  const linkedinStats = boardStats(linkedinListings)
 
   return (
     <main className="analytics-page">

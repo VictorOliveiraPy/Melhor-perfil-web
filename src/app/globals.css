@@ -504,6 +504,18 @@ textarea {
   gap: 14px;
 }
 
+/* Board sem nenhuma entrada ainda (banco real vazio) — sem enfeite,
+   só avisa e convida a ser o primeiro #1. */
+.board-empty {
+  margin: 0;
+  padding: 24px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-lg);
+  color: var(--muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
 /* /board combinado: Instagram e LinkedIn empilhados na mesma página
    (filtro "Todos"), cada um com seu heading próprio. */
 .board-platform-group + .board-platform-group {

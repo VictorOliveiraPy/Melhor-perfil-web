@@ -3,7 +3,7 @@ import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { profileDetailHref } from '../lib/profileDetailHref'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
-import type { BoardListing } from '../data/mockListings'
+import type { BoardListing } from '../lib/boardListing'
 
 type Props = {
   listing: BoardListing & { rank: number }

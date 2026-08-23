@@ -1,6 +1,6 @@
 import Link from 'next/link'
 import BoardSection from './BoardSection'
-import { listingsByPlatform } from '../data/mockListings'
+import { fetchBoardListings } from '../services/boardApiService'
 import { rankListings } from '../lib/rankListings'
 import { boardStats } from '../lib/boardStats'
 import type { Platform } from '../lib/platform'
@@ -25,10 +25,13 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 // na home (headingLevel 2, a home já tem seu próprio h1 na hero — pedido
 // do usuário pra ver os perfis na mesma tela da home, igual à referência
 // melhorlance.dev, que também mostra o board direto na home).
-export default function CombinedBoard({ filter, basePath, headingLevel = 1 }: Props) {
+//
+// Async: busca cada plataforma direto do melhorperfil-api (sem mock).
+export default async function CombinedBoard({ filter, basePath, headingLevel = 1 }: Props) {
   const platforms: Platform[] = filter ? [filter] : ['instagram', 'linkedin']
-  const totalClicks = platforms.reduce(
-    (sum, platform) => sum + boardStats(rankListings(listingsByPlatform(platform))).totalClicks,
+  const listingsByPlatformList = await Promise.all(platforms.map((platform) => fetchBoardListings(platform)))
+  const totalClicks = listingsByPlatformList.reduce(
+    (sum, listings) => sum + boardStats(rankListings(listings)).totalClicks,
     0,
   )
   const Heading = headingLevel === 1 ? 'h1' : 'h2'
@@ -64,10 +67,10 @@ export default function CombinedBoard({ filter, basePath, headingLevel = 1 }: Pr
         <span>{totalClicks.toLocaleString('pt-BR')} cliques em visibilidade</span>
       </div>
 
-      {platforms.map((platform) => (
+      {platforms.map((platform, index) => (
         <section key={platform} className="board-platform-group" aria-label={`Board de ${PLATFORM_LABEL[platform]}`}>
           {!filter && <SubHeading className="board-platform-heading">{PLATFORM_LABEL[platform]}</SubHeading>}
-          <BoardSection listings={listingsByPlatform(platform)} />
+          <BoardSection listings={listingsByPlatformList[index]} />
         </section>
       ))}
     </section>

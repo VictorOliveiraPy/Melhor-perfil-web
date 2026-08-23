@@ -4,7 +4,8 @@ import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
-import type { BoardListing, Platform } from '../data/mockListings'
+import type { BoardListing } from '../lib/boardListing'
+import type { Platform } from '../lib/platform'
 
 type Props = {
   platform: Platform

@@ -3,6 +3,9 @@ import CombinedBoard from '../components/CombinedBoard'
 import { siteAnalytics } from '../data/mockAnalytics'
 import { isPlatform } from '../lib/platform'
 
+// Ver src/app/board/page.tsx pro porquê do force-dynamic explícito.
+export const dynamic = 'force-dynamic'
+
 type Props = {
   searchParams: { platform?: string }
 }

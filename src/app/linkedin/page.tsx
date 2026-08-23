@@ -1,6 +1,8 @@
 import Board from '../../components/Board'
-import { listingsByPlatform } from '../../data/mockListings'
+
+// Ver src/app/instagram/page.tsx pro porquê do force-dynamic.
+export const dynamic = 'force-dynamic'
 
 export default function LinkedInBoard() {
-  return <Board platform="linkedin" heading="Perfis do LinkedIn em destaque" listings={listingsByPlatform('linkedin')} />
+  return <Board platform="linkedin" heading="Perfis do LinkedIn em destaque" />
 }
