@@ -75,6 +75,17 @@ export const mockListings: BoardListing[] = [
     timeLabel: 'há 1 dia',
   },
   {
+    id: 'lin-203',
+    display_name: 'Rafael Nunes',
+    bio: 'Vendas B2B e parcerias estratégicas',
+    currentBidCents: 700,
+    platform: 'linkedin',
+    profileHandle: 'rafael-nunes',
+    profileUrl: 'https://www.linkedin.com/in/rafael-nunes/',
+    clicks24h: 58,
+    timeLabel: 'há 4 dias',
+  },
+  {
     id: 'inst-103',
     display_name: 'Ana Ribeiro',
     bio: 'Fotografia e viagens pelo Brasil',

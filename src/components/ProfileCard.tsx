@@ -1,9 +1,11 @@
+import Link from 'next/link'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
 type Props = {
+  id?: string
   rank?: number
   display_name?: string
   bio?: string
@@ -17,6 +19,7 @@ type Props = {
 }
 
 export default function ProfileCard({
+  id,
   rank = 0,
   display_name = 'Usuário',
   bio = '',
@@ -67,7 +70,17 @@ export default function ProfileCard({
         <div className="profile-side">
           <div className="time-line">{timeLabel}</div>
           <div className="bid-amount">{formatCurrency(currentBidCents)}</div>
-          <div className="click-counter">{clicks24h} cliques</div>
+          <div className="click-counter">
+            {clicks24h} cliques
+            {id && platform && (
+              <>
+                {' · '}
+                <Link href={`/${platform}/p/${id}`} className="selo-link">
+                  selo
+                </Link>
+              </>
+            )}
+          </div>
         </div>
       </div>
     </div>

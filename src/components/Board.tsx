@@ -1,4 +1,5 @@
 import BidRow from './BidRow'
+import PodiumCard from './PodiumCard'
 import { rankListings } from '../lib/rankListings'
 import type { BoardListing, Platform } from '../data/mockListings'
 
@@ -18,6 +19,8 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 // componente, cada um só com as entradas (e o ranking) da sua plataforma.
 export default function Board({ platform, heading, listings }: Props) {
   const ranked = rankListings(listings)
+  const top3 = ranked.slice(0, 3)
+  const rest = ranked.slice(3)
   const totalClicks = ranked.reduce((sum, listing) => sum + listing.clicks24h, 0)
 
   return (
@@ -37,11 +40,21 @@ export default function Board({ platform, heading, listings }: Props) {
         <span>{totalClicks.toLocaleString('pt-BR')} cliques em visibilidade</span>
       </div>
 
-      <section className="board-list">
-        {ranked.map((listing) => (
-          <BidRow key={listing.id} listing={listing} />
-        ))}
-      </section>
+      {top3.length > 0 && (
+        <div className="podium">
+          {top3.map((listing) => (
+            <PodiumCard key={listing.id} listing={listing} />
+          ))}
+        </div>
+      )}
+
+      {rest.length > 0 && (
+        <section className="board-list">
+          {rest.map((listing) => (
+            <BidRow key={listing.id} listing={listing} />
+          ))}
+        </section>
+      )}
     </main>
   )
 }
