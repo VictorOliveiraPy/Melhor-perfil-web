@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { fontDisplay, fontMono, fontSans } from './fonts'
 import './globals.css'
 
 export const metadata = {
@@ -8,7 +9,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="pt-BR">
+    <html lang="pt-BR" className={`${fontDisplay.variable} ${fontSans.variable} ${fontMono.variable}`}>
       <body>
         <header className="site-header">
           <div className="container shell-header">
