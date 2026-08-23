@@ -861,6 +861,59 @@ textarea {
   font-size: 0.78rem;
 }
 
+.profile-fetch-status {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+/* Resultado da busca de foto/bio a partir do link (spec.md do
+   melhorperfil-api, seção 4) — aparece depois de confirmar o lance. */
+.profile-preview-card {
+  display: flex;
+  gap: 12px;
+  padding: 12px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-md);
+  background: var(--panel);
+}
+
+.profile-preview-avatar {
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border-radius: var(--radius-sm);
+  object-fit: cover;
+}
+
+.profile-preview-avatar-empty {
+  background: linear-gradient(135deg, #eddcb5, #94a4bc);
+  border: 1px solid var(--line);
+}
+
+.profile-preview-copy {
+  min-width: 0;
+}
+
+.profile-preview-copy strong {
+  display: block;
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.profile-preview-copy p {
+  margin: 2px 0 0;
+  color: var(--muted);
+  font-size: 0.8rem;
+}
+
+.profile-preview-fallback-note {
+  display: block;
+  margin-top: 4px;
+  color: var(--muted);
+  font-size: 0.72rem;
+}
+
 /* Small utilities for bid-form components */
 .bid-form-header { display:flex; align-items:center; gap:10px }
 .bid-form-title { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem }
