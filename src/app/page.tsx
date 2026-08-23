@@ -2,12 +2,11 @@ export default function Home() {
   return (
     <main className="landing-shell">
       <section className="hero-card">
-        <p className="eyebrow">#1 por valor do lance em reais</p>
-        <h1>
-          Pegue o número #1 por
-          <span> valor do lance em reais</span>
-        </h1>
-        <p className="lead-line">R$ 1008+</p>
+        <div className="hero-copy">
+          <p className="eyebrow">Pegue o número #1 por</p>
+          <h1>Valor do lance em reais</h1>
+          <p className="lead-line">R$ 1008+</p>
+        </div>
 
         <div className="hero-entry-row" aria-label="Formulário de submissão do perfil">
           <input type="text" placeholder="Cole o link do seu perfil ou @seuarroba" />
@@ -24,6 +23,11 @@ export default function Home() {
           <span><a href="https://www.himetrica.com/share/melhorlance.dev" target="_blank" rel="noreferrer">ver analytics →</a></span>
         </div>
 
+        <p className="hero-liner">
+          Um leaderboard público de perfis brasileiros. Ninguém aqui vai te dar upvote por pena.
+          Vai deixar o #1 pra outro viralizar?
+        </p>
+
         <div className="hero-stats">
           <div>
             <strong>Instagram</strong>
@@ -31,11 +35,11 @@ export default function Home() {
           </div>
           <div>
             <strong>LinkedIn</strong>
-            <span>perfil ou empresa</span>
+            <span>perfil profissional</span>
           </div>
           <div>
-            <strong>Ranking</strong>
-            <span>por valor &amp; tempo</span>
+            <strong>Board</strong>
+            <span>ranking público</span>
           </div>
         </div>
       </section>
