@@ -439,7 +439,8 @@ textarea {
   margin-bottom: 12px;
 }
 
-.board-topbar h1 {
+.board-topbar h1,
+.board-topbar h2 {
   margin: 0;
   font-family: var(--font-display);
   font-size: clamp(2.2rem, 4vw, 3.4rem);
@@ -447,6 +448,12 @@ textarea {
   letter-spacing: -0.08em;
   font-weight: 800;
   color: var(--text);
+}
+
+/* CombinedBoard embutido na home (headingLevel=2) — mesma leitura do
+   board de página cheia, só com respiro em relação à hero acima. */
+.board-embed {
+  margin-top: 48px;
 }
 
 .board-tabs {

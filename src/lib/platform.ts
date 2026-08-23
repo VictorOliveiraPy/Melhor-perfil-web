@@ -3,3 +3,7 @@
 // src/data/mockListings.ts importam daqui em vez de cada um redeclarar o
 // mesmo union type — achado do code-reviewer, 2026-08-23.
 export type Platform = 'instagram' | 'linkedin'
+
+export function isPlatform(value: string | undefined): value is Platform {
+  return value === 'instagram' || value === 'linkedin'
+}

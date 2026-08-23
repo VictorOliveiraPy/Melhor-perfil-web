@@ -1,7 +1,15 @@
 import Link from 'next/link'
+import CombinedBoard from '../components/CombinedBoard'
 import { siteAnalytics } from '../data/mockAnalytics'
+import { isPlatform } from '../lib/platform'
 
-export default function Home() {
+type Props = {
+  searchParams: { platform?: string }
+}
+
+export default function Home({ searchParams }: Props) {
+  const filter = isPlatform(searchParams.platform) ? searchParams.platform : undefined
+
   return (
     <main className="landing-shell">
       <section className="hero-intro-row">
@@ -65,6 +73,12 @@ export default function Home() {
           <strong>Pix com confirmação instantânea</strong>
         </div>
       </section>
+
+      {/* Perfis na mesma tela da home — pedido do usuário, igual à
+          referência melhorlance.dev (o board dela também mora na home,
+          não numa rota separada). /board continua existindo à parte pra
+          quem chegar direto nele pelo nav. */}
+      <CombinedBoard filter={filter} basePath="/" headingLevel={2} />
     </main>
   )
 }
