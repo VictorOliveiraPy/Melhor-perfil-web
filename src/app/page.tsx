@@ -1,5 +1,6 @@
 import Link from 'next/link'
 import CombinedBoard from '../components/CombinedBoard'
+import HeroBidForm from '../components/HeroBidForm'
 import { siteAnalytics } from '../data/mockAnalytics'
 import { isPlatform } from '../lib/platform'
 
@@ -40,10 +41,7 @@ export default function Home({ searchParams }: Props) {
         <span>Pegue o número #1 por</span> <span className="sparkle" aria-hidden>·</span> <span className="gradient-amount">R$ 1008</span> <span className="sparkle" aria-hidden>·</span>
       </h1>
 
-      <div className="hero-entry-row" aria-label="Formulário de submissão do perfil">
-        <input type="text" placeholder="Cole o link do seu perfil ou @seuarroba" />
-        <button type="button" className="primary-button">Pegar o #1</button>
-      </div>
+      <HeroBidForm />
 
       <p className="subtext">
         Já está na lista? Cola o mesmo link e aumenta o lance. Você paga só a diferença.

@@ -261,8 +261,29 @@ textarea {
   -webkit-text-fill-color: transparent;
 }
 
-.hero-entry-row {
+/* Toggle de plataforma da hero — a página não sabe sozinha se o @/link é
+   Instagram ou LinkedIn (ao contrário das páginas de board/perfil, que já
+   nascem numa plataforma fixa), então precisa perguntar. */
+.hero-platform-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   margin-top: 18px;
+  padding: 4px;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: rgba(255, 255, 255, 0.02);
+}
+
+.hero-platform-toggle button {
+  border: none;
+  background: none;
+  cursor: pointer;
+  font: inherit;
+}
+
+.hero-entry-row {
+  margin-top: 10px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -278,6 +299,11 @@ textarea {
   color: var(--text);
   padding: 0 18px;
   outline: none;
+}
+
+.hero-entry-row input.hero-amount-input {
+  flex: none;
+  width: 120px;
 }
 
 .hero-entry-row input::placeholder {
@@ -1102,6 +1128,10 @@ textarea {
   .hero-entry-row {
     flex-direction: column;
     align-items: stretch;
+  }
+
+  .hero-entry-row input.hero-amount-input {
+    width: 100%;
   }
 
   .hero-stats,
