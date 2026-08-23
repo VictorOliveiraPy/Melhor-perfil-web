@@ -1,6 +1,7 @@
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
+import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
 type Props = {
   rank?: number
@@ -35,22 +36,34 @@ export default function ProfileCard({
   return (
     <div className="profile-info">
       <div className="profile-row">
-        <div className="rank-pill">#{rank || '—'}</div>
+        <div className="rank-pill" aria-hidden>
+          #{rank || '—'}
+        </div>
+
         <div className="avatar" aria-label={`${display_name} avatar`}>
           {avatarUrl ? <img src={avatarUrl} alt={display_name} /> : null}
         </div>
+
         <div className="profile-copy">
           <div className="profile-headline">
             <h3 dangerouslySetInnerHTML={{ __html: safeName }} />
-            {platformLabel && <span className="platform-badge">{platformLabel}</span>}
+            {platform && (
+              <span className="platform-badge" aria-hidden>
+                {platform === 'instagram' ? <InstagramIcon /> : <LinkedInIcon />}
+                <span>{platformLabel}</span>
+              </span>
+            )}
           </div>
+
           <div className="profile-meta">
             <span dangerouslySetInnerHTML={{ __html: safeBio || 'Sem bio disponível' }} />
           </div>
+
           <a className="profile-link" href={url} target="_blank" rel="noreferrer noopener">
             @{profileHandle || 'perfil'}
           </a>
         </div>
+
         <div className="profile-side">
           <div className="time-line">{timeLabel}</div>
           <div className="bid-amount">{formatCurrency(currentBidCents)}</div>

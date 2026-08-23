@@ -27,7 +27,7 @@ export default function Board() {
 
       <section className="board-list">
         {mockListings.map((listing) => (
-          <article key={listing.id} className="listing-row">
+          <article key={listing.id} className="listing-row card-horizontal">
             <div className="listing-main">
               <ProfileCard
                 rank={listing.rank}

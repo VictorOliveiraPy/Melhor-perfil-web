@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import { formatCurrency } from '../lib/formatCurrency'
 import { isForbiddenBio, isValidProfileUrl } from '../lib/contentRules'
 import { previewBid } from '../lib/previewBid'
+import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
 type Props = {
   currentBidCents: number
@@ -25,7 +26,14 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
   const canSubmit = displayName.trim().length > 0 && urlIsValid && !bioHasForbiddenContent && amountCents > 0
 
   return (
-    <form className="bid-form" onSubmit={(event) => event.preventDefault()}>
+    <form className="bid-form" onSubmit={(event) => event.preventDefault()} aria-label="Formulário de lance">
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+        <div className="platform-badge" aria-hidden>
+          {platform === 'instagram' ? <InstagramIcon /> : <LinkedInIcon />}
+          <span style={{ fontSize: '0.82rem', fontWeight: 800, color: 'var(--text)' }}>{platform === 'instagram' ? 'Instagram' : 'LinkedIn'}</span>
+        </div>
+        <div style={{ fontSize: '0.86rem', color: 'var(--muted)' }}>Valor atual: <strong style={{ color: 'var(--accent)' }}>{formatCurrency(currentBidCents)}</strong></div>
+      </div>
       <div className="field-group">
         <label htmlFor="display-name">Nome de exibição</label>
         <input id="display-name" value={displayName} onChange={(event) => setDisplayName(event.target.value)} placeholder="Seu nome no board" />

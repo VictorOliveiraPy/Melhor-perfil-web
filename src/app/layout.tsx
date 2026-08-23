@@ -13,7 +13,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <header className="site-header">
           <div className="container shell-header">
             <div className="brand-wrap">
-              <span className="brand-mark">melhorperfil</span>
+              <span>
+                <span className="brand-mark">melhorperfil</span>
+                <span className="brand-sub">Ranking de perfis — Instagram & LinkedIn</span>
+              </span>
             </div>
             <nav aria-label="Navegação principal">
               <a href="/">Início</a>

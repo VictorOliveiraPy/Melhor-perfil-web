@@ -1,15 +1,24 @@
 :root {
-  --bg: #0d0d0d;
-  --bg-strong: #121212;
-  --panel: rgba(17, 17, 17, 0.8);
-  --panel-strong: rgba(13, 13, 13, 0.96);
+  /* Paleta inspirada no melhorlance.dev, adaptada para perfis */
+  --bg: #0b0b0b;
+  --bg-strong: #0f1113;
+  --panel: rgba(22, 22, 22, 0.85);
   --card: rgba(255, 255, 255, 0.02);
   --line: rgba(255, 255, 255, 0.08);
   --text: #f5f1eb;
-  --muted: rgba(245, 241, 235, 0.72);
-  --gold: #f4d7a1;
-  --gold-strong: #f1c97d;
-  --shadow: rgba(0, 0, 0, 0.28);
+  --muted: rgba(245, 241, 235, 0.66);
+  --accent: #f1c97d; /* dourado */
+  --accent-2: #e8c48f;
+  --danger: #f76b6b;
+  --shadow: rgba(2, 6, 23, 0.6);
+
+  /* Typography scale */
+  --font-sans: Inter, 'Segoe UI', system-ui, -apple-system, 'Helvetica Neue', Arial;
+  --text-xs: 0.72rem;
+  --text-sm: 0.86rem;
+  --text-md: 1rem;
+  --text-lg: 1.25rem;
+  --display-1: clamp(2rem, 4vw, 3.4rem);
 }
 
 html, body, #__next {
@@ -26,11 +35,11 @@ html {
 
 body {
   margin: 0;
-  font-family: "Inter", "Segoe UI", sans-serif;
-  background:
-    radial-gradient(circle at top, rgba(236, 197, 124, 0.12), transparent 24%),
-    linear-gradient(180deg, #0d0d0d 0%, #121212 100%);
+  font-family: var(--font-sans);
+  background: linear-gradient(180deg, var(--bg) 0%, var(--bg-strong) 100%);
   color: var(--text);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 img {
@@ -53,10 +62,10 @@ textarea {
 .site-header {
   position: sticky;
   top: 0;
-  z-index: 10;
-  background: rgba(10, 10, 10, 0.8);
-  backdrop-filter: blur(12px);
-  border-bottom: 1px solid var(--line);
+  z-index: 20;
+  background: rgba(10, 10, 10, 0.6);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid rgba(255,255,255,0.04);
 }
 
 .shell-header {
@@ -67,10 +76,17 @@ textarea {
 }
 
 .brand-mark {
-  font-size: 1.14rem;
+  font-size: 1.05rem;
   font-weight: 900;
-  letter-spacing: -0.08em;
+  letter-spacing: -0.06em;
   color: var(--text);
+}
+
+.brand-sub {
+  display: block;
+  font-size: var(--text-sm);
+  color: var(--muted);
+  font-weight: 700;
 }
 
 .site-header nav {
@@ -102,11 +118,11 @@ textarea {
 .hero-card {
   max-width: 1220px;
   margin: 0 auto;
-  padding: 38px 34px 30px;
-  border: 1px solid var(--line);
-  border-radius: 30px;
-  background: rgba(18, 18, 18, 0.84);
-  box-shadow: 0 32px 80px var(--shadow);
+  padding: 34px 28px 28px;
+  border-radius: 20px;
+  border: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 24px 60px var(--shadow);
 }
 
 .hero-intro {
@@ -187,7 +203,7 @@ textarea {
 }
 
 .price-display .value {
-  font-size: clamp(2.3rem, 5vw, 4rem);
+  font-size: clamp(2rem, 6vw, 3.4rem);
 }
 
 .hero-entry-row {
@@ -362,19 +378,25 @@ textarea {
 
 .listing-row {
   display: grid;
-  grid-template-columns: minmax(0, 1.7fr) minmax(250px, 0.85fr);
-  gap: 20px;
+  grid-template-columns: 1fr;
+  gap: 12px;
+  align-items: stretch;
+  padding: 12px;
+  border-radius: 14px;
+  border: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  box-shadow: 0 10px 28px rgba(2,6,23,0.36);
+}
+
+/* Horizontal card style used on desktop */
+.listing-row.card-horizontal {
+  grid-template-columns: 1fr 320px;
   align-items: center;
-  padding: 16px;
-  border-radius: 18px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
-  box-shadow: 0 16px 30px rgba(0, 0, 0, 0.12);
 }
 
 .profile-row {
   display: grid;
-  grid-template-columns: auto auto minmax(0, 1fr) auto;
+  grid-template-columns: auto auto 1fr auto;
   gap: 12px;
   align-items: center;
 }
@@ -389,12 +411,12 @@ textarea {
 }
 
 .avatar {
-  width: 56px;
-  height: 56px;
+  width: 64px;
+  height: 64px;
   overflow: hidden;
-  border-radius: 14px;
+  border-radius: 12px;
   background: linear-gradient(135deg, #eddcb5, #94a4bc);
-  border: 1px solid var(--line);
+  border: 1px solid rgba(255,255,255,0.04);
 }
 
 .avatar img {
@@ -461,10 +483,10 @@ textarea {
 
 .bid-amount {
   margin-top: 4px;
-  font-size: 1.25rem;
-  letter-spacing: -0.05em;
+  font-size: 1.2rem;
+  letter-spacing: -0.04em;
   font-weight: 900;
-  color: var(--text);
+  color: var(--accent);
 }
 
 .click-counter {
@@ -758,14 +780,20 @@ textarea {
 .platform-badge {
   display: inline-flex;
   align-items: center;
-  justify-content: center;
+  gap: 8px;
   border-radius: 999px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
-  padding: 4px 7px;
-  font-size: 0.68rem;
-  font-weight: 700;
+  padding: 6px 8px;
+  background: rgba(0,0,0,0.36);
+  border: 1px solid rgba(255,255,255,0.03);
   color: var(--muted);
+  font-size: var(--text-xs);
+  font-weight: 800;
+}
+
+.platform-badge svg {
+  width: 16px;
+  height: 16px;
+  display: block;
 }
 
 .profile-link {
@@ -809,9 +837,9 @@ textarea {
   display: grid;
   gap: 10px;
   padding: 14px;
-  border-radius: 14px;
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
+  border-radius: 12px;
+  border: 1px solid rgba(255,255,255,0.03);
+  background: linear-gradient(180deg, rgba(255,255,255,0.01), rgba(255,255,255,0.02));
 }
 
 .field-group {
@@ -875,30 +903,29 @@ textarea {
 }
 
 .primary-button,
+.primary-button,
 .secondary-button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   border-radius: 12px;
-  min-height: 44px;
+  min-height: 48px;
   padding: 0 18px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
   text-decoration: none;
   font-weight: 800;
   cursor: pointer;
-  transition: transform 0.15s ease, opacity 0.15s ease;
+  transition: transform 0.12s ease, box-shadow 0.12s ease, opacity 0.12s ease;
 }
-
 .primary-button {
-  color: #111111;
-  background: linear-gradient(135deg, #f7f0e2, #efd99b 40%, #f1d090);
-  box-shadow: 0 16px 30px rgba(241, 208, 144, 0.18);
+  color: #0b0b0b;
+  background: linear-gradient(135deg, var(--accent-2), var(--accent));
+  box-shadow: 0 12px 28px rgba(225,170,90,0.12);
 }
-
 .secondary-button {
   color: var(--text);
-  background: rgba(255, 255, 255, 0.02);
-  border-color: var(--line);
+  background: rgba(255,255,255,0.02);
+  border: 1px solid rgba(255,255,255,0.04);
+}
 }
 
 .primary-button:hover,
@@ -955,6 +982,18 @@ textarea {
     gap: 12px;
     padding: 12px 0 14px;
   }
+}
+
+/* Utilities */
+.flex { display: flex; }
+.items-center { align-items: center; }
+.gap-8 { gap: 8px; }
+.text-muted { color: var(--muted); }
+.sr-only { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+
+/* Desktop behavior: add class card-horizontal to listing-row to get two-column layout */
+@media (min-width: 900px) {
+  .listing-row.card-horizontal { grid-template-columns: 1fr 360px; }
 }
 
 .active-tab,
