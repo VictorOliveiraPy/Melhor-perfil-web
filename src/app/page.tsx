@@ -2,30 +2,36 @@ export default function Home() {
   return (
     <main className="hero-page">
       <section className="hero-card">
-        <p className="eyebrow">Board de perfis</p>
-        <h1>Seu perfil no topo do ranking</h1>
+        <p className="eyebrow">Autoridade digital</p>
+        <h1>Sua presença digital começa no topo</h1>
         <p className="lead-line">R$ 1.008+</p>
         <p className="lead">
-          Cole o link do seu perfil ou @seuarroba e suba no ranking. Já está na lista? Reforce seu lance e ganhe mais visibilidade.
+          Transforme visibilidade em reputação. O ranking mostra quem está ganhando atenção, relevância e oportunidades reais no mercado digital.
         </p>
 
         <div className="hero-actions">
-          <a href="/board" className="primary-button">Ver o board</a>
-          <a href="/board" className="secondary-button">Entrar no ranking</a>
+          <a href="/board" className="primary-button">Ver o ranking</a>
+          <a href="/board" className="secondary-button">Entrar no board</a>
+        </div>
+
+        <div className="proof-row" aria-label="Indicadores de autoridade">
+          <span><strong>43</strong> online agora</span>
+          <span><strong>5.926</strong> visitas / 24h</span>
+          <span><strong>13.687</strong> pageviews / 24h</span>
         </div>
 
         <div className="stats-grid">
           <div>
-            <strong>43</strong>
-            <span>pessoas online agora</span>
+            <strong>#1</strong>
+            <span>visibilidade profissional</span>
           </div>
           <div>
-            <strong>5.926</strong>
-            <span>visitantes / 24h</span>
+            <strong>+18%</strong>
+            <span>engajamento por posição</span>
           </div>
           <div>
-            <strong>13.687</strong>
-            <span>pageviews / 24h</span>
+            <strong>R$ 1.008</strong>
+            <span>lance inicial no topo</span>
           </div>
         </div>
       </section>

@@ -7,8 +7,8 @@ export default function Board() {
     <main className="board-page">
       <div className="page-header">
         <div>
-          <p className="eyebrow">Board de perfis</p>
-          <h1>Ranking de perfis</h1>
+          <p className="eyebrow">Ranking de autoridade</p>
+          <h1>Perfis em destaque</h1>
         </div>
         <div className="board-tabs">
           <span className="active-tab">Todos</span>
@@ -22,7 +22,7 @@ export default function Board() {
         <span>·</span>
         <a href="#">Atualizar</a>
         <span>·</span>
-        <span>11.159 cliques</span>
+        <span>11.159 cliques em visibilidade</span>
       </div>
 
       <section className="board-list">

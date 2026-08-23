@@ -9,7 +9,9 @@ html, body, #__next {
 body {
   margin: 0;
   font-family: "Inter", "Segoe UI", sans-serif;
-  background: #0d0d0d;
+  background:
+    radial-gradient(circle at top, rgba(185, 140, 92, 0.12), transparent 32%),
+    linear-gradient(180deg, #0a0a0a 0%, #111111 100%);
   color: #f5f5f1;
 }
 
@@ -120,9 +122,9 @@ body {
 }
 
 .primary-button {
-  background: #f5f1eb;
+  background: linear-gradient(135deg, #f5f1eb, #d9c4a7);
   color: #111111;
-  box-shadow: 0 8px 30px rgba(245, 241, 235, 0.14);
+  box-shadow: 0 12px 30px rgba(217, 196, 167, 0.18);
 }
 
 .primary-button:disabled {
@@ -133,10 +135,34 @@ body {
 .secondary-button {
   background: rgba(255,255,255,0.02);
   color: #f5f5f1;
+  border-color: rgba(255,255,255,0.12);
+}
+
+.proof-row {
+  margin-top: 24px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  color: rgba(245, 245, 241, 0.78);
+  font-size: 0.84rem;
+}
+
+.proof-row span {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 10px;
+  border-radius: 999px;
+  border: 1px solid rgba(255,255,255,0.08);
+  background: rgba(255,255,255,0.02);
+}
+
+.proof-row strong {
+  color: #f5f5f1;
 }
 
 .stats-grid {
-  margin-top: 28px;
+  margin-top: 24px;
   display: grid;
   grid-template-columns: repeat(3, minmax(0, 1fr));
   gap: 16px;
