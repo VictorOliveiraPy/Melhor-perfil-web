@@ -2,11 +2,11 @@ export default function Home() {
   return (
     <main className="hero-page">
       <section className="hero-card">
-        <p className="eyebrow">Pegue o número #1 por</p>
-        <h1>Valor do lance em reais</h1>
+        <p className="eyebrow">Board de perfis</p>
+        <h1>Seu perfil no topo do ranking</h1>
         <p className="lead-line">R$ 1.008+</p>
         <p className="lead">
-          Cole o link do seu perfil ou @seuarroba e suba no ranking. Já está na lista? Cola o mesmo link e aumenta o lance.
+          Cole o link do seu perfil ou @seuarroba e suba no ranking. Já está na lista? Reforce seu lance e ganhe mais visibilidade.
         </p>
 
         <div className="hero-actions">

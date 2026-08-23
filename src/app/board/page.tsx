@@ -7,11 +7,12 @@ export default function Board() {
     <main className="board-page">
       <div className="page-header">
         <div>
-          <p className="eyebrow">O board</p>
-          <h1>Instagram & LinkedIn</h1>
+          <p className="eyebrow">Board de perfis</p>
+          <h1>Ranking de perfis</h1>
         </div>
         <div className="board-tabs">
-          <span className="active-tab">Instagram</span>
+          <span className="active-tab">Todos</span>
+          <span className="muted-tab">Instagram</span>
           <span className="muted-tab">LinkedIn</span>
         </div>
       </div>
