@@ -7,14 +7,29 @@ export type BoardListing = {
   platform: 'instagram' | 'linkedin'
   profileHandle: string
   profileUrl: string
+  avatarUrl?: string
   clicks24h: number
   timeLabel: string
 }
 
 export const mockListings: BoardListing[] = [
   {
-    id: 'inst-101',
+    id: 'lin-101',
     rank: 1,
+    display_name: 'Victor Hugo',
+    bio: 'Product & growth — construindo negócios digitais',
+    currentBidCents: 12800,
+    platform: 'linkedin',
+    profileHandle: 'victor-hugo-py',
+    profileUrl: 'https://www.linkedin.com/in/victor-hugo-py/',
+    avatarUrl:
+      'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=200&q=80',
+    clicks24h: 412,
+    timeLabel: 'há 22 minutos',
+  },
+  {
+    id: 'inst-101',
+    rank: 2,
     display_name: 'João Silva',
     bio: 'Designer & developer — Porto Alegre',
     currentBidCents: 1200,

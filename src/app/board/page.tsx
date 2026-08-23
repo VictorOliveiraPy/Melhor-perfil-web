@@ -37,6 +37,7 @@ export default function Board() {
                 profileUrl={listing.profileUrl}
                 platform={listing.platform}
                 profileHandle={listing.profileHandle}
+                avatarUrl={listing.avatarUrl}
                 clicks24h={listing.clicks24h}
                 timeLabel={listing.timeLabel}
               />

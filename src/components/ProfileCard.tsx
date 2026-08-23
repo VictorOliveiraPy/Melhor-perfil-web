@@ -10,6 +10,7 @@ type Props = {
   profileUrl?: string
   platform?: 'instagram' | 'linkedin'
   profileHandle?: string
+  avatarUrl?: string
   clicks24h?: number
   timeLabel?: string
 }
@@ -22,6 +23,7 @@ export default function ProfileCard({
   profileUrl,
   platform,
   profileHandle,
+  avatarUrl,
   clicks24h = 0,
   timeLabel = 'há 1 hora',
 }: Props) {
@@ -34,7 +36,9 @@ export default function ProfileCard({
     <div className="profile-info">
       <div className="profile-row">
         <div className="rank-pill">#{rank || '—'}</div>
-        <div className="avatar" aria-hidden="true" />
+        <div className="avatar" aria-label={`${display_name} avatar`}>
+          {avatarUrl ? <img src={avatarUrl} alt={display_name} /> : null}
+        </div>
         <div className="profile-copy">
           <div className="profile-headline">
             <h3 dangerouslySetInnerHTML={{ __html: safeName }} />
