@@ -1,13 +1,15 @@
 "use client"
 
 import { useMemo, useState, type FormEvent } from 'react'
+import Link from 'next/link'
 import { formatCurrency } from '../lib/formatCurrency'
 import { isValidProfileUrl } from '../lib/contentRules'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { resolveProfileInput } from '../lib/resolveProfileInput'
 import { previewBid } from '../lib/previewBid'
 import { sanitizeDisplayName } from '../lib/sanitize'
-import { fetchProfilePreview, type ProfilePreview } from '../services/profilePreviewService'
+import { profileDetailHref } from '../lib/profileDetailHref'
+import { submitBid, type BidResult } from '../services/bidService'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
 type Props = {
@@ -19,8 +21,9 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
   const [profileInput, setProfileInput] = useState('')
   const [amount, setAmount] = useState((currentBidCents / 100).toFixed(2))
   const [isOwner, setIsOwner] = useState(false)
-  const [profilePreview, setProfilePreview] = useState<ProfilePreview | null>(null)
-  const [isFetchingPreview, setIsFetchingPreview] = useState(false)
+  const [bidResult, setBidResult] = useState<BidResult | null>(null)
+  const [submitError, setSubmitError] = useState<string | null>(null)
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const amountCents = useMemo(() => Math.round(parseFloat(amount || '0') * 100), [amount])
   const preview = useMemo(() => previewBid({ currentBidCents }, { amountCents, isOwner }), [amountCents, currentBidCents, isOwner])
@@ -31,31 +34,35 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
 
   function handleProfileInputChange(value: string) {
     setProfileInput(value)
-    setProfilePreview(null)
+    setBidResult(null)
+    setSubmitError(null)
   }
 
-  // "No momento do lance" (spec.md do melhorperfil-api, seção 4): busca
-  // foto/bio reais a partir do link só quando a pessoa confirma o lance,
-  // não a cada tecla digitada. O scraping de verdade roda no
-  // melhorperfil-api; enquanto o endpoint não existe (ou falha), o
-  // service devolve fallback (nome = @handle) — é o que aparece aqui
-  // embaixo de qualquer jeito, sem travar o fluxo.
+  // "No momento do lance" (spec.md do melhorperfil-api, seção 4): confirmar
+  // já cria/reforça a entrada de verdade no Postgres — o backend faz o
+  // scraping (perfil novo) e devolve o que publicou de fato, incluindo se
+  // caiu em fallback. Erro de regra de negócio (valor abaixo do mínimo,
+  // reforço que não aumenta o lance) mostra a mensagem real do backend em
+  // vez de falhar silenciosamente.
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
-    if (!canSubmit || isFetchingPreview) return
+    if (!canSubmit || isSubmitting) return
 
-    setIsFetchingPreview(true)
+    setIsSubmitting(true)
+    setSubmitError(null)
     try {
-      const result = await fetchProfilePreview(resolvedUrl, platform)
-      setProfilePreview(result)
+      const result = await submitBid(resolvedUrl, platform, amountCents, isOwner)
+      setBidResult(result)
+    } catch (error) {
+      setSubmitError(error instanceof Error ? error.message : 'Não foi possível confirmar o lance. Tente de novo.')
     } finally {
-      setIsFetchingPreview(false)
+      setIsSubmitting(false)
     }
   }
 
-  const safeName = profilePreview ? sanitizeDisplayName(profilePreview.display_name) : ''
-  const safeBio = profilePreview?.bio ? sanitizeDisplayName(profilePreview.bio) : ''
-  const hasSafeAvatar = Boolean(profilePreview?.avatarUrl && profilePreview.avatarUrl.startsWith('https://'))
+  const safeName = bidResult ? sanitizeDisplayName(bidResult.displayName) : ''
+  const safeBio = bidResult?.bio ? sanitizeDisplayName(bidResult.bio) : ''
+  const hasSafeAvatar = Boolean(bidResult?.avatarUrl && bidResult.avatarUrl.startsWith('https://'))
 
   return (
     <form className="bid-form" onSubmit={handleSubmit} aria-label="Formulário de lance">
@@ -96,13 +103,15 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
         <strong>{formatCurrency(preview.chargeCents)}</strong>
       </div>
 
-      {isFetchingPreview && <p className="profile-fetch-status">Buscando foto e descrição do perfil…</p>}
+      {isSubmitting && <p className="profile-fetch-status">Confirmando lance e buscando foto/bio…</p>}
 
-      {profilePreview && (
+      {submitError && <p className="field-error">{submitError}</p>}
+
+      {bidResult && (
         <div className="profile-preview-card">
           {hasSafeAvatar ? (
             // eslint-disable-next-line @next/next/no-img-element -- avatar vem de URL dinâmica (scraping), fora do domínio conhecido em build time
-            <img className="profile-preview-avatar" src={profilePreview.avatarUrl} alt="" />
+            <img className="profile-preview-avatar" src={bidResult.avatarUrl} alt="" />
           ) : (
             <div className="profile-preview-avatar profile-preview-avatar-empty" aria-hidden />
           )}
@@ -113,17 +122,20 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
             ) : (
               <p className="profile-preview-fallback-note">Sem bio disponível.</p>
             )}
-            {profilePreview.usedFallback && (
+            {bidResult.usedFallback && (
               <small className="profile-preview-fallback-note">
-                Não conseguimos buscar foto/bio automaticamente — publicando só com o @ do perfil.
+                Não conseguimos buscar foto/bio automaticamente — publicado só com o @ do perfil.
               </small>
             )}
+            <p className="profile-preview-fallback-note">
+              <Link href={profileDetailHref(platform, String(bidResult.listingId))}>Publicado! Ver no board →</Link>
+            </p>
           </div>
         </div>
       )}
 
-      <button type="submit" className="primary-button" disabled={!canSubmit || isFetchingPreview}>
-        {isFetchingPreview ? 'Buscando perfil…' : 'Pegar o #1'}
+      <button type="submit" className="primary-button" disabled={!canSubmit || isSubmitting}>
+        {isSubmitting ? 'Confirmando…' : 'Pegar o #1'}
       </button>
     </form>
   )

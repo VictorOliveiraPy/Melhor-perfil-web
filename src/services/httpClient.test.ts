@@ -36,4 +36,21 @@ describe('postJson', () => {
     // When / Then
     await expect(postJson('/api/profiles/preview', {})).rejects.toBeInstanceOf(HttpError)
   })
+
+  it('should surface the backend "detail" message when the response is not ok', async () => {
+    // Given: FastAPI devolve erro de validação como { detail: "..." }
+    // (HTTPException) — sem isso, o usuário só vê "failed with status 400"
+    // em vez do motivo real (ex.: "Reinforcement must be at least R$1...")
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: false, status: 400, json: () => Promise.resolve({ detail: 'Bid amount must be a whole number of reais' }) }),
+    )
+
+    // When
+    const error = await postJson('/api/listings/bid', {}).catch((err) => err)
+
+    // Then
+    expect(error).toBeInstanceOf(HttpError)
+    expect(error.message).toBe('Bid amount must be a whole number of reais')
+  })
 })

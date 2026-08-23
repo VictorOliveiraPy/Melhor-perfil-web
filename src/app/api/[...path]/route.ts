@@ -39,8 +39,7 @@ async function handleProxyRequest(request: NextRequest, path: string[]): Promise
   } catch {
     // melhorperfil-api fora do ar, endpoint ainda não implementado, ou
     // API_BASE_URL apontando pra lugar nenhum (comum em dev local antes do
-    // backend subir) — devolve 502 pro caller decidir o que fazer (ver
-    // src/services/profilePreviewService.ts: trata isso como fallback).
+    // backend subir) — devolve 502 pro caller decidir o que fazer.
     return NextResponse.json({ error: 'Falha ao contatar a API' }, { status: 502 })
   }
 }

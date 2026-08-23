@@ -20,7 +20,15 @@ export async function postJson<TResponse>(path: string, body: unknown): Promise<
   })
 
   if (!response.ok) {
-    throw new HttpError(response.status, `POST ${path} failed with status ${response.status}`)
+    // FastAPI devolve erro de validação como { detail: "..." } — repassa
+    // o motivo real (ex.: "Reinforcement must be at least R$1...") em vez
+    // de só "failed with status 400", pra caller poder mostrar pro usuário.
+    const detail = await response
+      .json()
+      .then((data: unknown) => (data && typeof data === 'object' && 'detail' in data ? String((data as { detail: unknown }).detail) : null))
+      .catch(() => null)
+
+    throw new HttpError(response.status, detail ?? `POST ${path} failed with status ${response.status}`)
   }
 
   return (await response.json()) as TResponse
