@@ -1,5 +1,4 @@
-import ProfileCard from '../../components/ProfileCard'
-import BidForm from '../../components/BidForm'
+import BidRow from '../../components/BidRow'
 import { mockListings } from '../../data/mockListings'
 
 export default function Board() {
@@ -27,25 +26,7 @@ export default function Board() {
 
       <section className="board-list">
         {mockListings.map((listing) => (
-          <article key={listing.id} className="listing-row card-horizontal">
-            <div className="listing-main">
-              <ProfileCard
-                rank={listing.rank}
-                display_name={listing.display_name}
-                bio={listing.bio}
-                currentBidCents={listing.currentBidCents}
-                profileUrl={listing.profileUrl}
-                platform={listing.platform}
-                profileHandle={listing.profileHandle}
-                avatarUrl={listing.avatarUrl}
-                clicks24h={listing.clicks24h}
-                timeLabel={listing.timeLabel}
-              />
-            </div>
-            <div className="cta">
-              <BidForm currentBidCents={listing.currentBidCents} platform={listing.platform} />
-            </div>
-          </article>
+          <BidRow key={listing.id} listing={listing} />
         ))}
       </section>
     </main>

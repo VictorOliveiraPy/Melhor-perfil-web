@@ -147,22 +147,21 @@ textarea {
   padding-top: 18px;
 }
 
-.hero-card {
-  max-width: 1220px;
-  margin: 0 auto;
-  padding: 34px 28px 28px;
-  border-radius: var(--radius-lg);
-  border: 1px solid rgba(16,16,16,0.04);
-  background: linear-gradient(180deg, rgba(255,255,255,1), rgba(255,255,255,1));
-  box-shadow: 0 12px 30px rgba(16,16,16,0.06);
-}
-
-.hero-intro {
-  max-width: 840px;
+/* Sem card envolvendo a hero inteira — o melhorlance.dev de referência
+   deita o texto direto no fundo cinza (--bg) e só usa card branco pontual
+   (o proof-card abaixo, os cards do board). Ver spec.md seção 3, "Direção
+   visual": mesma simplicidade, sem reforma de design. */
+.hero-intro-row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 20px;
 }
 
 .hero-copy-line {
   margin: 0;
+  max-width: 620px;
   color: var(--muted);
   font-family: var(--font-sans);
   font-weight: 400;
@@ -184,53 +183,70 @@ textarea {
   text-transform: uppercase;
 }
 
-.hero-price-box {
-  margin-top: 18px;
-}
-
-.price-stepper {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  max-width: 720px;
-  padding: 10px 12px 12px;
-  border-radius: var(--radius-lg);
+/* Card compacto flutuante de indicadores — espelha o cartão de "N pessoas
+   online" do canto superior direito do site de referência, em vez da fileira
+   de pílulas que tínhamos antes. */
+.proof-card {
+  min-width: 240px;
+  padding: 14px 16px;
+  border-radius: var(--radius-md);
+  border: 1px solid rgba(16,16,16,0.04);
   background: #fff;
-  border: 1px solid rgba(16,16,16,0.06);
 }
 
-.stepper-button {
-  width: 44px;
-  height: 44px;
-  border-radius: var(--radius-sm);
-  border: 1px solid var(--line);
-  background: rgba(255, 255, 255, 0.02);
-  color: var(--text);
-  font-size: 2rem;
-  line-height: 1;
-  cursor: pointer;
-}
-
-.price-readout {
-  flex: 1;
-  min-width: 0;
-}
-
-.price-label {
-  display: block;
+.proof-card p {
+  margin: 0 0 6px;
   color: var(--muted);
-  font-size: 0.83rem;
-  margin-bottom: 4px;
+  font-size: 0.82rem;
 }
 
-.price-display {
-  display: flex;
-  align-items: baseline;
-  gap: 6px;
-  font-weight: 900;
-  letter-spacing: -0.08em;
-  /* Espelha .gradient-amount do melhorlance.dev: texto em gradiente
-     rosa -> roxo via background-clip, não cor sólida. */
+.proof-card p:last-of-type {
+  margin-bottom: 8px;
+}
+
+.proof-card strong {
+  color: var(--text);
+}
+
+.proof-card a {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.82rem;
+  font-weight: 700;
+}
+
+.proof-card a:hover {
+  text-decoration: underline;
+}
+
+.proof-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  margin-right: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+}
+
+/* Título com o valor do lance embutido em gradiente inline, igual ao
+   melhorlance.dev — substitui o stepper +/- decorativo que tínhamos antes
+   (nunca era funcional; a referência também não tem um). */
+.hero-heading {
+  margin: 22px 0 0;
+  font-family: var(--font-display);
+  font-size: clamp(1.8rem, 4vw, 2.8rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1.15;
+  color: var(--text);
+}
+
+.hero-heading .sparkle {
+  color: var(--accent-tonal-border);
+}
+
+.gradient-amount {
+  font-family: var(--font-mono);
   background-image: linear-gradient(96deg, var(--quente), var(--accent));
   background-clip: text;
   -webkit-background-clip: text;
@@ -238,20 +254,8 @@ textarea {
   -webkit-text-fill-color: transparent;
 }
 
-.price-display .currency {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: clamp(1.25rem, 3vw, 2rem);
-}
-
-.price-display .value {
-  font-family: var(--font-mono);
-  font-weight: 600;
-  font-size: clamp(2rem, 6vw, 3.4rem);
-}
-
 .hero-entry-row {
-  margin-top: 26px;
+  margin-top: 18px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -283,34 +287,6 @@ textarea {
   margin: 16px 0 0;
   color: var(--muted);
   font-size: 0.96rem;
-}
-
-.proof-row {
-  margin-top: 18px;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 10px;
-}
-
-.proof-row span {
-  display: inline-flex;
-  align-items: center;
-  padding: 8px 10px;
-  border-radius: 999px;
-  border: 1px solid rgba(16,16,16,0.04);
-  background: #fff;
-  color: var(--muted);
-  font-size: 0.78rem;
-}
-
-.proof-row strong {
-  color: var(--text);
-}
-
-.proof-row a {
-  color: var(--text);
-  text-decoration: none;
-  font-weight: 700;
 }
 
 .hero-stats {
@@ -359,7 +335,7 @@ textarea {
 
 .board-topbar {
   display: flex;
-  align-items: end;
+  align-items: flex-end;
   justify-content: space-between;
   gap: 18px;
   margin-bottom: 12px;
@@ -425,15 +401,29 @@ textarea {
 .listing-row {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(250px, 0.9fr);
-  /* Topo, não centro: a coluna do BidForm é mais alta que o resumo do
-     perfil, e centralizar deixava um respiro grande acima do card. */
-  align-items: start;
+  /* Centralizado por padrão: com o BidForm recolhido (BidRow), as duas
+     colunas ficam com altura parecida — lista direta, sem enfeite, igual
+     ao espírito do melhorlance.dev (spec.md seção 3). Só quando o form
+     abre (.is-expanded) a coluna direita fica bem mais alta que o resumo
+     do perfil, aí sim alinha pelo topo. */
+  align-items: center;
   gap: 18px;
-  padding: 18px 16px;
+  padding: 14px 16px;
   border: 1px solid var(--line);
   border-radius: var(--radius-lg);
   background: var(--card);
+  box-shadow: 0 1px 0 rgba(16,16,16,0.03);
+}
+
+.listing-row.is-expanded {
+  align-items: start;
   box-shadow: 0 12px 28px rgba(16,16,16,0.08);
+}
+
+/* Destaque leve pro #1, igual ao card tonal do topo do board de referência. */
+.listing-row.is-top {
+  border-color: var(--accent-tonal-border);
+  background: var(--accent-tonal-bg);
 }
 
 /* Card wrapper for profile entries when used standalone */
@@ -448,14 +438,28 @@ textarea {
 /* Make bid-form sticky on larger screens */
 @media (min-width: 900px) {
   .listing-row.card-horizontal { grid-template-columns: 1fr 360px; }
-  .listing-row.card-horizontal .bid-form { position: sticky; top: 110px; }
+  .listing-row.card-horizontal.is-expanded .bid-form { position: sticky; top: 110px; }
   .bid-form { box-shadow: 0 8px 24px rgba(16,16,16,0.06); }
 }
 
 /* Horizontal card style used on desktop */
 .listing-row.card-horizontal {
   grid-template-columns: 1fr 320px;
-  align-items: start;
+}
+
+.cta-collapsed {
+  display: flex;
+  justify-content: flex-end;
+}
+
+@media (max-width: 899px) {
+  .cta-collapsed {
+    justify-content: stretch;
+  }
+
+  .cta-collapsed .secondary-button {
+    width: 100%;
+  }
 }
 
 .profile-row {
@@ -719,8 +723,12 @@ textarea {
 }
 
 @media (max-width: 820px) {
-  .hero-card {
-    padding: 28px 20px 20px;
+  .hero-intro-row {
+    flex-direction: column;
+  }
+
+  .proof-card {
+    width: 100%;
   }
 
   .hero-entry-row {
@@ -733,7 +741,11 @@ textarea {
     grid-template-columns: 1fr;
   }
 
-  .listing-row {
+  /* .listing-row.card-horizontal (0,2,0) teria precedência sobre .listing-row
+     (0,1,0) sozinho e nunca deixaria empilhar aqui — inclui a variante
+     explicitamente pra ganhar a cascata. */
+  .listing-row,
+  .listing-row.card-horizontal {
     grid-template-columns: 1fr;
   }
 
