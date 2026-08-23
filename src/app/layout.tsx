@@ -24,6 +24,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             <nav aria-label="Navegação principal">
               <a href="/instagram">Instagram</a>
               <a href="/linkedin">LinkedIn</a>
+              <a href="/analytics">Analytics</a>
             </nav>
           </div>
         </header>

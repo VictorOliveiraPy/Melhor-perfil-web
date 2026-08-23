@@ -1,6 +1,7 @@
 import BidRow from './BidRow'
 import PodiumCard from './PodiumCard'
 import { rankListings } from '../lib/rankListings'
+import { boardStats } from '../lib/boardStats'
 import type { BoardListing, Platform } from '../data/mockListings'
 
 type Props = {
@@ -21,7 +22,7 @@ export default function Board({ platform, heading, listings }: Props) {
   const ranked = rankListings(listings)
   const top3 = ranked.slice(0, 3)
   const rest = ranked.slice(3)
-  const totalClicks = ranked.reduce((sum, listing) => sum + listing.clicks24h, 0)
+  const { totalClicks } = boardStats(ranked)
 
   return (
     <main className="board-page">

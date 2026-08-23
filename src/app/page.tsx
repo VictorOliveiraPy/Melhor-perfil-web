@@ -1,3 +1,6 @@
+import Link from 'next/link'
+import { siteAnalytics } from '../data/mockAnalytics'
+
 export default function Home() {
   return (
     <main className="landing-shell">
@@ -7,13 +10,18 @@ export default function Home() {
           <strong> Vai deixar o #1 pra outro viralizar?</strong>
         </p>
 
+        {/* Analytics próprio (src/app/analytics) — não linka mais pro
+            dashboard do melhorlance.dev, o site de referência. */}
         <div className="proof-card" aria-label="Indicadores de tráfego">
           <p>
             <span className="proof-dot" aria-hidden />
-            <strong>29</strong>&nbsp;pessoas online agora
+            <strong>{siteAnalytics.peopleOnline}</strong>&nbsp;pessoas online agora
           </p>
-          <p><strong>8.307</strong> visitantes &amp; 19.131 pageviews desde o lançamento</p>
-          <a href="https://www.himetrica.com/share/melhorlance.dev" target="_blank" rel="noreferrer">ver o analytics →</a>
+          <p>
+            <strong>{siteAnalytics.visitors.toLocaleString('pt-BR')}</strong> visitantes &amp;{' '}
+            {siteAnalytics.pageviews.toLocaleString('pt-BR')} pageviews desde o lançamento
+          </p>
+          <Link href="/analytics">ver o analytics →</Link>
         </div>
       </section>
 
