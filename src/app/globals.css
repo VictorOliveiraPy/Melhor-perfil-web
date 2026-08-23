@@ -425,7 +425,9 @@ textarea {
 .listing-row {
   display: grid;
   grid-template-columns: minmax(0, 1.7fr) minmax(250px, 0.9fr);
-  align-items: center;
+  /* Topo, não centro: a coluna do BidForm é mais alta que o resumo do
+     perfil, e centralizar deixava um respiro grande acima do card. */
+  align-items: start;
   gap: 18px;
   padding: 18px 16px;
   border: 1px solid var(--line);
@@ -453,7 +455,7 @@ textarea {
 /* Horizontal card style used on desktop */
 .listing-row.card-horizontal {
   grid-template-columns: 1fr 320px;
-  align-items: center;
+  align-items: start;
 }
 
 .profile-row {
