@@ -1,9 +1,7 @@
 {
   "permissions": {
     "defaultMode": "bypassPermissions",
-    "allow": [
-      // pode manter sua lista, mas ela vira irrelevante nesse modo
-    ],
+    "allow": [],
     "deny": [
       "Read(./.env)",
       "Read(./.env.*)",
@@ -11,5 +9,5 @@
       "Bash(git push --force*)"
     ]
   },
-  "additionalDirectories": ["../melhorperfil-web", "/tmp"]
+  "additionalDirectories": ["../melhorperfil-api", "/tmp"]
 }
