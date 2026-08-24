@@ -12,6 +12,7 @@ type ApiListingItem = {
   current_bid_cents: number
   status: string
   created_at: string
+  avatarUrl: string | null
 }
 
 type BoardApiResponse = {
@@ -31,10 +32,12 @@ function mapApiItem(item: ApiListingItem): BoardListing {
     platform: item.platform,
     profileHandle: deriveProfileHandle(item.profile_url),
     profileUrl: item.profile_url,
-    // avatarUrl fica de fora por enquanto: scraping (spec.md do
-    // melhorperfil-api, seção 4) ainda não está ligado na criação do lance,
-    // então a API não tem foto real pra devolver. ProfileCard já trata
-    // avatarUrl ausente com um placeholder — não é bug.
+    // Achado em produção 2026-08-24: esse campo nunca era lido aqui (comentário
+    // antigo dizia que a API não tinha foto pra devolver — deixou de ser
+    // verdade faz tempo, e a foto sumia mesmo já salva no Postgres). API
+    // devolve null quando não tem foto ainda; BoardListing.avatarUrl é
+    // opcional (undefined), não null — por isso o ?? undefined.
+    avatarUrl: item.avatarUrl ?? undefined,
     clicks24h: 0,
     timeLabel: formatRelativeTime(item.created_at),
   }
