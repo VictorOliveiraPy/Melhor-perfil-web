@@ -39,7 +39,7 @@ export default async function CombinedBoard({ filter, basePath, headingLevel = 1
   const todosHref = basePath === '/' ? '/' : basePath
 
   return (
-    <section className="board-embed" aria-label="Board de perfis">
+    <section id="board" className="board-embed" aria-label="Board de perfis">
       <div className="board-topbar">
         <div>
           <p className="eyebrow">Board</p>

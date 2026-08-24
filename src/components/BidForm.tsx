@@ -8,7 +8,6 @@ import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { resolveProfileInput } from '../lib/resolveProfileInput'
 import { previewBid } from '../lib/previewBid'
 import { sanitizeDisplayName } from '../lib/sanitize'
-import { profileDetailHref } from '../lib/profileDetailHref'
 import { submitBid, type BidResult } from '../services/bidService'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
@@ -128,7 +127,12 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
               </small>
             )}
             <p className="profile-preview-fallback-note">
-              <Link href={profileDetailHref(platform, String(bidResult.listingId))}>Publicado! Ver no board →</Link>
+              {/* Pedido do usuário: o board é a página inicial, não a
+                  página de perfil isolada (profileDetailHref) — sem
+                  ranking ao redor, parecia "não ter nada" depois de
+                  publicar. #board rola até a seção do board na home
+                  (CombinedBoard). */}
+              <Link href="/#board">Publicado! Ver no board →</Link>
             </p>
           </div>
         </div>

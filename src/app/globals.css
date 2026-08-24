@@ -1038,6 +1038,12 @@ textarea {
   font-size: 0.72rem;
 }
 
+.field-success {
+  color: var(--accent);
+  font-size: 0.72rem;
+  font-weight: 600;
+}
+
 /* Página de perfil individual (spec.md seção 4: /instagram/p/:id e
    /linkedin/p/:id) — destino do "selo" clicável do board. */
 .profile-detail-page {

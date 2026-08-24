@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation'
 import { isValidProfileUrl } from '../lib/contentRules'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { resolveProfileInput } from '../lib/resolveProfileInput'
-import { profileDetailHref } from '../lib/profileDetailHref'
 import { submitBid } from '../services/bidService'
 import type { Platform } from '../lib/platform'
 
@@ -20,7 +19,11 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 // no site: "network não mostra nenhum sinal de chamar nada". Este
 // componente é a versão de verdade: escolhe a plataforma (a hero não sabe
 // isso sozinha, ao contrário das páginas de board), confirma o lance via
-// submitBid() e leva pra página de perfil publicada.
+// submitBid() e volta pra própria home — é lá que mora o board (spec.md
+// seção 1 + pedido do usuário: "o board deve ser a página inicial"), não
+// numa página de perfil isolada sem ranking ao redor. router.refresh()
+// força o Server Component da home a buscar de novo (senão o Next
+// reaproveitaria o RSC já cacheado, sem o lance novo).
 export default function HeroBidForm() {
   const router = useRouter()
   const [platform, setPlatform] = useState<Platform>('instagram')
@@ -28,6 +31,7 @@ export default function HeroBidForm() {
   const [amount, setAmount] = useState('1')
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
+  const [submitSuccess, setSubmitSuccess] = useState(false)
 
   const amountCents = useMemo(() => Math.round(parseFloat(amount || '0') * 100), [amount])
   const resolvedUrl = useMemo(() => normalizeProfileUrl(resolveProfileInput(profileInput, platform)), [profileInput, platform])
@@ -40,11 +44,21 @@ export default function HeroBidForm() {
 
     setIsSubmitting(true)
     setSubmitError(null)
+    setSubmitSuccess(false)
     try {
-      const result = await submitBid(resolvedUrl, platform, amountCents, false)
-      router.push(profileDetailHref(platform, String(result.listingId)))
+      await submitBid(resolvedUrl, platform, amountCents, false)
+      setProfileInput('')
+      setSubmitSuccess(true)
+      // #board: a home permanece na mesma rota, então router.push sozinho
+      // não rola a tela pra ver a entrada nova — o hash leva até a seção
+      // do board (id="board" em CombinedBoard.tsx). refresh() invalida o
+      // Server Component pra buscar de novo (senão o Next reaproveitaria o
+      // RSC já cacheado, sem o lance que acabou de entrar).
+      router.push('/#board')
+      router.refresh()
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Não foi possível confirmar o lance. Tente de novo.')
+    } finally {
       setIsSubmitting(false)
     }
   }
@@ -92,6 +106,7 @@ export default function HeroBidForm() {
         <small className="field-error">Perfil inválido para {PLATFORM_LABEL[platform]}.</small>
       )}
       {submitError && <p className="field-error">{submitError}</p>}
+      {submitSuccess && <p className="field-success">Publicado! Já aparece no board aqui embaixo. ↓</p>}
     </form>
   )
 }
