@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AvatarImage from './AvatarImage'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
@@ -46,7 +47,7 @@ export default function ProfileCard({
         </div>
 
         <div className="avatar" aria-label={`${display_name} avatar`}>
-          {avatarUrl ? <img src={avatarUrl} alt={display_name} /> : null}
+          <AvatarImage src={avatarUrl} alt={display_name} />
         </div>
 
         <div className="profile-copy">

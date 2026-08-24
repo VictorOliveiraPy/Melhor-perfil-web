@@ -23,6 +23,10 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
   const [bidResult, setBidResult] = useState<BidResult | null>(null)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
+  // Achado do usuário testando no ar: uma foto real (@pontifex) carregou
+  // quebrada (ícone feio nativo do navegador) em vez de cair no placeholder
+  // — URL assinada de CDN de terceiro pode falhar depois de publicada.
+  const [avatarLoadFailed, setAvatarLoadFailed] = useState(false)
 
   const amountCents = useMemo(() => Math.round(parseFloat(amount || '0') * 100), [amount])
   const preview = useMemo(() => previewBid({ currentBidCents }, { amountCents, isOwner }), [amountCents, currentBidCents, isOwner])
@@ -35,6 +39,7 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
     setProfileInput(value)
     setBidResult(null)
     setSubmitError(null)
+    setAvatarLoadFailed(false)
   }
 
   // "No momento do lance" (spec.md do melhorperfil-api, seção 4): confirmar
@@ -61,7 +66,7 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
 
   const safeName = bidResult ? sanitizeDisplayName(bidResult.displayName) : ''
   const safeBio = bidResult?.bio ? sanitizeDisplayName(bidResult.bio) : ''
-  const hasSafeAvatar = Boolean(bidResult?.avatarUrl && bidResult.avatarUrl.startsWith('https://'))
+  const hasSafeAvatar = Boolean(bidResult?.avatarUrl && bidResult.avatarUrl.startsWith('https://')) && !avatarLoadFailed
 
   return (
     <form className="bid-form" onSubmit={handleSubmit} aria-label="Formulário de lance">
@@ -110,7 +115,12 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
         <div className="profile-preview-card">
           {hasSafeAvatar ? (
             // eslint-disable-next-line @next/next/no-img-element -- avatar vem de URL dinâmica (scraping), fora do domínio conhecido em build time
-            <img className="profile-preview-avatar" src={bidResult.avatarUrl} alt="" />
+            <img
+              className="profile-preview-avatar"
+              src={bidResult.avatarUrl}
+              alt=""
+              onError={() => setAvatarLoadFailed(true)}
+            />
           ) : (
             <div className="profile-preview-avatar profile-preview-avatar-empty" aria-hidden />
           )}

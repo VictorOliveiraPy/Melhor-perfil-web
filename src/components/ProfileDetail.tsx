@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AvatarImage from './AvatarImage'
 import BidForm from './BidForm'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
@@ -41,7 +42,7 @@ export default function ProfileDetail({ platform, listing }: Props) {
           </div>
 
           <div className="avatar avatar-lg" aria-label={`${listing.display_name} avatar`}>
-            {listing.avatarUrl ? <img src={listing.avatarUrl} alt={listing.display_name} /> : null}
+            <AvatarImage src={listing.avatarUrl} alt={listing.display_name} />
           </div>
 
           <div className="profile-copy">
