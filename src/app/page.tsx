@@ -2,7 +2,12 @@ import Link from 'next/link'
 import CombinedBoard from '../components/CombinedBoard'
 import HeroBidForm from '../components/HeroBidForm'
 import { siteAnalytics } from '../data/mockAnalytics'
-import { isPlatform } from '../lib/platform'
+import { isPlatform, type Platform } from '../lib/platform'
+import { fetchBoardListings } from '../services/boardApiService'
+import { boardStats } from '../lib/boardStats'
+import { rankListings } from '../lib/rankListings'
+import { heroTargetBidCents } from '../lib/heroTargetBidCents'
+import { formatCurrency } from '../lib/formatCurrency'
 
 // Ver src/app/board/page.tsx pro porquê do force-dynamic explícito.
 export const dynamic = 'force-dynamic'
@@ -11,8 +16,20 @@ type Props = {
   searchParams: { platform?: string }
 }
 
-export default function Home({ searchParams }: Props) {
+const PLATFORMS: Platform[] = ['instagram', 'linkedin']
+
+// Async: precisa buscar os dois boards antes de montar a hero (o valor
+// mostrado depende do maior lance atual — ver heroTargetBidCents). O mesmo
+// fetchBoardListings roda de novo dentro de CombinedBoard logo abaixo; o
+// Next.js dedupa automaticamente fetches idênticos (mesma URL/opções)
+// dentro da mesma renderização (React Request Memoization), então isso não
+// dobra a chamada real de rede.
+export default async function Home({ searchParams }: Props) {
   const filter = isPlatform(searchParams.platform) ? searchParams.platform : undefined
+
+  const listingsByPlatform = await Promise.all(PLATFORMS.map((platform) => fetchBoardListings(platform)))
+  const topBidCentsByPlatform = listingsByPlatform.map((listings) => boardStats(rankListings(listings)).topBidCents)
+  const heroAmountCents = heroTargetBidCents(topBidCentsByPlatform)
 
   return (
     <main className="landing-shell">
@@ -38,7 +55,8 @@ export default function Home({ searchParams }: Props) {
       </section>
 
       <h1 className="hero-heading">
-        <span>Pegue o número #1 por</span> <span className="sparkle" aria-hidden>·</span> <span className="gradient-amount">R$ 1008</span> <span className="sparkle" aria-hidden>·</span>
+        <span>Pegue o número #1 por</span> <span className="sparkle" aria-hidden>·</span>{' '}
+        <span className="gradient-amount">{formatCurrency(heroAmountCents)}</span> <span className="sparkle" aria-hidden>·</span>
       </h1>
 
       <HeroBidForm />
