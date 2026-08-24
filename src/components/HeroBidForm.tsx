@@ -6,6 +6,7 @@ import { isValidProfileUrl } from '../lib/contentRules'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { resolveProfileInput } from '../lib/resolveProfileInput'
 import { submitBid } from '../services/bidService'
+import { trackEvent } from '../lib/trackEvent'
 import type { Platform } from '../lib/platform'
 
 const PLATFORM_LABEL: Record<Platform, string> = {
@@ -46,7 +47,15 @@ export default function HeroBidForm() {
     setSubmitError(null)
     setSubmitSuccess(false)
     try {
-      await submitBid(resolvedUrl, platform, amountCents, false)
+      const result = await submitBid(resolvedUrl, platform, amountCents, false)
+      // "purchase_completed" do nosso produto — evento que mais importa
+      // rastrear (pedido do usuário depois de instalar o Himetrica).
+      trackEvent('bid_placed', {
+        platform,
+        amountCents,
+        isReinforcement: result.isReinforcement,
+        chargedCents: result.chargedCents,
+      })
       setProfileInput('')
       setSubmitSuccess(true)
       // #board: a home permanece na mesma rota, então router.push sozinho

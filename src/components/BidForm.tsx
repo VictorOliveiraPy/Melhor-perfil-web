@@ -9,6 +9,7 @@ import { resolveProfileInput } from '../lib/resolveProfileInput'
 import { previewBid } from '../lib/previewBid'
 import { isSafeAvatarUrl } from '../lib/isSafeAvatarUrl'
 import { sanitizeDisplayName } from '../lib/sanitize'
+import { trackEvent } from '../lib/trackEvent'
 import { submitBid, type BidResult } from '../services/bidService'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
@@ -57,6 +58,14 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
     setSubmitError(null)
     try {
       const result = await submitBid(resolvedUrl, platform, amountCents, isOwner)
+      // "purchase_completed" do nosso produto — evento que mais importa
+      // rastrear (pedido do usuário depois de instalar o Himetrica).
+      trackEvent('bid_placed', {
+        platform,
+        amountCents,
+        isReinforcement: result.isReinforcement,
+        chargedCents: result.chargedCents,
+      })
       setBidResult(result)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Não foi possível confirmar o lance. Tente de novo.')
