@@ -7,6 +7,7 @@ import { isValidProfileUrl } from '../lib/contentRules'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { resolveProfileInput } from '../lib/resolveProfileInput'
 import { previewBid } from '../lib/previewBid'
+import { isSafeAvatarUrl } from '../lib/isSafeAvatarUrl'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { submitBid, type BidResult } from '../services/bidService'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
@@ -66,7 +67,7 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
 
   const safeName = bidResult ? sanitizeDisplayName(bidResult.displayName) : ''
   const safeBio = bidResult?.bio ? sanitizeDisplayName(bidResult.bio) : ''
-  const hasSafeAvatar = Boolean(bidResult?.avatarUrl && bidResult.avatarUrl.startsWith('https://')) && !avatarLoadFailed
+  const hasSafeAvatar = isSafeAvatarUrl(bidResult?.avatarUrl) && !avatarLoadFailed
 
   return (
     <form className="bid-form" onSubmit={handleSubmit} aria-label="Formulário de lance">
