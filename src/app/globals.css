@@ -520,6 +520,23 @@ textarea {
   margin-bottom: 18px;
 }
 
+/* Formulário de entrada em /instagram e /linkedin — quem chega direto
+   nessas páginas (sem passar pela home) precisa de um jeito de dar lance
+   sem depender do board já ter alguém. */
+.board-entry-form {
+  max-width: 420px;
+  margin-bottom: 32px;
+}
+
+.board-entry-heading {
+  margin: 0 0 12px;
+  font-family: var(--font-display);
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: -0.03em;
+  color: var(--text);
+}
+
 .board-meta-row a {
   color: var(--text);
   text-decoration: none;

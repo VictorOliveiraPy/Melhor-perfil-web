@@ -1,4 +1,5 @@
 import BoardSection from './BoardSection'
+import BidForm from './BidForm'
 import { fetchBoardListings } from '../services/boardApiService'
 import { rankListings } from '../lib/rankListings'
 import { boardStats } from '../lib/boardStats'
@@ -27,7 +28,7 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 // aninhado dentro de uma page.tsx síncrona.
 export default async function Board({ platform, heading }: Props) {
   const listings = await fetchBoardListings(platform)
-  const { totalClicks } = boardStats(rankListings(listings))
+  const { totalClicks, topBidCents } = boardStats(rankListings(listings))
 
   return (
     <main className="board-page">
@@ -45,6 +46,15 @@ export default async function Board({ platform, heading }: Props) {
         <span>·</span>
         <span>{totalClicks.toLocaleString('pt-BR')} cliques em visibilidade</span>
       </div>
+
+      {/* Achado do usuário: quem entra direto em /instagram ou /linkedin
+          (sem passar pela home) não tinha NENHUM jeito de dar lance — só a
+          lista. Diferente da hero (HeroBidForm), aqui não precisa de toggle
+          de plataforma: a página já é fixa numa só. */}
+      <section className="board-entry-form" aria-label={`Entrar no ranking de ${PLATFORM_LABEL[platform]}`}>
+        <h2 className="board-entry-heading">Entrar no ranking</h2>
+        <BidForm currentBidCents={topBidCents} platform={platform} />
+      </section>
 
       <BoardSection listings={listings} />
     </main>
