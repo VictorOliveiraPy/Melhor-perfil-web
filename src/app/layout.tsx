@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import Script from 'next/script'
 import { fontDisplay, fontMono, fontSans } from './fonts'
 import './globals.css'
 
@@ -30,6 +31,20 @@ export default function RootLayout({ children }: { children: ReactNode }) {
           </div>
         </header>
         <div className="container main-shell">{children}</div>
+        {/* Himetrica é um tracker client-side (a chave é feita pra rodar no
+            navegador — não é segredo tipo GATEWAY_SECRET, é padrão deles
+            mesmos, igual site ID do Plausible/PostHog). strategy=
+            "afterInteractive" é o equivalente do Next pro `defer` pedido no
+            setup deles. Só carrega se a env var estiver configurada (Vercel
+            → NEXT_PUBLIC_HIMETRICA_API_KEY) — sem ela, undefined vira a
+            string "undefined" no atributo, então checa antes. */}
+        {process.env.NEXT_PUBLIC_HIMETRICA_API_KEY && (
+          <Script
+            src="https://cdn.himetrica.com/tracker.js"
+            strategy="afterInteractive"
+            data-api-key={process.env.NEXT_PUBLIC_HIMETRICA_API_KEY}
+          />
+        )}
       </body>
     </html>
   )
