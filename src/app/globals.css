@@ -982,6 +982,60 @@ textarea {
   font-size: 0.72rem;
 }
 
+/* Mercado Pago integrado (spec.md seção 6/7) — QR code + copia-e-cola
+   enquanto o pagamento não confirma (PixPaymentPanel.tsx). */
+.pix-payment-panel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  margin-top: 6px;
+  padding: 12px;
+  border: 1px dashed var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--card);
+  text-align: center;
+}
+
+.pix-instructions {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.78rem;
+}
+
+.pix-qr-image {
+  width: 160px;
+  height: 160px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: #fff;
+}
+
+.pix-copy-row {
+  display: flex;
+  gap: 6px;
+  width: 100%;
+}
+
+.pix-copy-row input {
+  flex: 1;
+  min-width: 0;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  color: var(--muted);
+  font-size: 0.68rem;
+  font-family: var(--font-mono);
+}
+
+.pix-waiting {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.72rem;
+  font-style: italic;
+}
+
 /* Small utilities for bid-form components */
 .bid-form-header { display:flex; align-items:center; gap:10px }
 .bid-form-title { font-family: var(--font-display); font-weight: 700; font-size: 0.95rem }

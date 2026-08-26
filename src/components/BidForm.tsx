@@ -12,6 +12,7 @@ import { sanitizeDisplayName } from '../lib/sanitize'
 import { trackEvent } from '../lib/trackEvent'
 import { submitBid, type BidResult } from '../services/bidService'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
+import PixPaymentPanel from './PixPaymentPanel'
 
 type Props = {
   currentBidCents: number
@@ -23,6 +24,9 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
   const [amount, setAmount] = useState((currentBidCents / 100).toFixed(2))
   const [isOwner, setIsOwner] = useState(false)
   const [bidResult, setBidResult] = useState<BidResult | null>(null)
+  // Mercado Pago integrado (spec.md seção 6/7): o lance não publica na
+  // hora — a entrada fica pendente até o webhook confirmar o Pix.
+  const [paymentConfirmed, setPaymentConfirmed] = useState(false)
   const [submitError, setSubmitError] = useState<string | null>(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   // Achado do usuário testando no ar: uma foto real (@pontifex) carregou
@@ -40,38 +44,49 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
   function handleProfileInputChange(value: string) {
     setProfileInput(value)
     setBidResult(null)
+    setPaymentConfirmed(false)
     setSubmitError(null)
     setAvatarLoadFailed(false)
   }
 
-  // "No momento do lance" (spec.md do melhorperfil-api, seção 4): confirmar
-  // já cria/reforça a entrada de verdade no Postgres — o backend faz o
-  // scraping (perfil novo) e devolve o que publicou de fato, incluindo se
-  // caiu em fallback. Erro de regra de negócio (valor abaixo do mínimo,
-  // reforço que não aumenta o lance) mostra a mensagem real do backend em
-  // vez de falhar silenciosamente.
+  // "No momento do lance" (spec.md do melhorperfil-api, seção 4): já cria/
+  // reforça a entrada de verdade no Postgres, com o scraping (perfil novo)
+  // — mas como pendente, aguardando a cobrança Pix gerada aqui ser paga
+  // (seção 6/7). O backend devolve o que já raspou de fato (nome/foto/bio),
+  // incluindo se caiu em fallback, mesmo antes do pagamento confirmar. Erro
+  // de regra de negócio (valor abaixo do mínimo, reforço que não aumenta o
+  // lance) mostra a mensagem real do backend em vez de falhar
+  // silenciosamente.
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault()
     if (!canSubmit || isSubmitting) return
 
     setIsSubmitting(true)
     setSubmitError(null)
+    setPaymentConfirmed(false)
     try {
       const result = await submitBid(resolvedUrl, platform, amountCents, isOwner)
-      // "purchase_completed" do nosso produto — evento que mais importa
-      // rastrear (pedido do usuário depois de instalar o Himetrica).
-      trackEvent('bid_placed', {
-        platform,
-        amountCents,
-        isReinforcement: result.isReinforcement,
-        chargedCents: result.chargedCents,
-      })
       setBidResult(result)
     } catch (error) {
       setSubmitError(error instanceof Error ? error.message : 'Não foi possível confirmar o lance. Tente de novo.')
     } finally {
       setIsSubmitting(false)
     }
+  }
+
+  function handlePaymentConfirmed() {
+    if (!bidResult) return
+    // "purchase_completed" do nosso produto — evento que mais importa
+    // rastrear (pedido do usuário depois de instalar o Himetrica). Só
+    // dispara aqui, no pagamento CONFIRMADO — antes disso ainda não virou
+    // dinheiro de verdade.
+    trackEvent('bid_placed', {
+      platform,
+      amountCents: bidResult.newTotalCents,
+      isReinforcement: bidResult.isReinforcement,
+      chargedCents: bidResult.chargedCents,
+    })
+    setPaymentConfirmed(true)
   }
 
   const safeName = bidResult ? sanitizeDisplayName(bidResult.displayName) : ''
@@ -117,7 +132,7 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
         <strong>{formatCurrency(preview.chargeCents)}</strong>
       </div>
 
-      {isSubmitting && <p className="profile-fetch-status">Confirmando lance e buscando foto/bio…</p>}
+      {isSubmitting && <p className="profile-fetch-status">Gerando cobrança Pix e buscando foto/bio…</p>}
 
       {submitError && <p className="field-error">{submitError}</p>}
 
@@ -146,20 +161,29 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
                 Não conseguimos buscar foto/bio automaticamente — publicado só com o @ do perfil.
               </small>
             )}
-            <p className="profile-preview-fallback-note">
-              {/* Pedido do usuário: o board é a página inicial, não a
-                  página de perfil isolada (profileDetailHref) — sem
-                  ranking ao redor, parecia "não ter nada" depois de
-                  publicar. #board rola até a seção do board na home
-                  (id="board" em src/app/page.tsx). */}
-              <Link href="/#board">Publicado! Ver no board →</Link>
-            </p>
+            {paymentConfirmed ? (
+              <p className="profile-preview-fallback-note">
+                {/* Pedido do usuário: o board é a página inicial, não a
+                    página de perfil isolada (profileDetailHref) — sem
+                    ranking ao redor, parecia "não ter nada" depois de
+                    publicar. #board rola até a seção do board na home
+                    (id="board" em src/app/page.tsx). */}
+                <Link href="/#board">Pagamento confirmado! Ver no board →</Link>
+              </p>
+            ) : (
+              <PixPaymentPanel
+                listingId={bidResult.listingId}
+                qrCode={bidResult.pixQrCode}
+                qrCodeBase64={bidResult.pixQrCodeBase64}
+                onConfirmed={handlePaymentConfirmed}
+              />
+            )}
           </div>
         </div>
       )}
 
       <button type="submit" className="primary-button" disabled={!canSubmit || isSubmitting}>
-        {isSubmitting ? 'Confirmando…' : 'Pegar o #1'}
+        {isSubmitting ? 'Gerando cobrança…' : 'Pegar o #1'}
       </button>
     </form>
   )

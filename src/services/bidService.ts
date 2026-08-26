@@ -10,6 +10,13 @@ export type BidResult = {
   bio: string
   avatarUrl?: string
   usedFallback: boolean
+  // Cobrança Pix de verdade (Mercado Pago) — a entrada só vira "ativa" e o
+  // valor só é publicado depois do webhook confirmar (spec.md seção 6/7).
+  // pixQrCode é o texto copia-e-cola; pixQrCodeBase64 é a imagem do QR
+  // pronta em base64.
+  pixQrCode: string
+  pixQrCodeBase64: string
+  paymentStatus: string
 }
 
 // Confirma o lance de verdade — cria ou reforça a entrada no

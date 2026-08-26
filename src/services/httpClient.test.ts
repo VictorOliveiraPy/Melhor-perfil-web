@@ -1,5 +1,36 @@
 import { describe, it, expect, vi, afterEach } from 'vitest'
-import { postJson, HttpError } from './httpClient'
+import { postJson, getJson, HttpError } from './httpClient'
+
+describe('getJson', () => {
+  afterEach(() => {
+    vi.unstubAllGlobals()
+  })
+
+  it('should GET and return the parsed response', async () => {
+    // Given
+    const fetchMock = vi.fn().mockResolvedValue({ ok: true, json: () => Promise.resolve({ status: 'pendente' }) })
+    vi.stubGlobal('fetch', fetchMock)
+
+    // When
+    const result = await getJson('/api/listings/42/status')
+
+    // Then
+    expect(result).toEqual({ status: 'pendente' })
+    expect(fetchMock).toHaveBeenCalledWith('/api/listings/42/status')
+  })
+
+  it('should throw HttpError with the backend detail when the response is not ok', async () => {
+    // Given
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: false, status: 404, json: () => Promise.resolve({ detail: 'Listing not found' }) }))
+
+    // When
+    const error = await getJson('/api/listings/999/status').catch((err) => err)
+
+    // Then
+    expect(error).toBeInstanceOf(HttpError)
+    expect(error.message).toBe('Listing not found')
+  })
+})
 
 describe('postJson', () => {
   afterEach(() => {
