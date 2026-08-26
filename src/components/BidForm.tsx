@@ -151,7 +151,7 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
                   página de perfil isolada (profileDetailHref) — sem
                   ranking ao redor, parecia "não ter nada" depois de
                   publicar. #board rola até a seção do board na home
-                  (CombinedBoard). */}
+                  (id="board" em src/app/page.tsx). */}
               <Link href="/#board">Publicado! Ver no board →</Link>
             </p>
           </div>

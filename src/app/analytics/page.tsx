@@ -12,12 +12,8 @@ import { formatCurrency } from '../../lib/formatCurrency'
 export const dynamic = 'force-dynamic'
 
 export default async function Analytics() {
-  const [instagramListings, linkedinListings] = await Promise.all([
-    fetchBoardListings('instagram'),
-    fetchBoardListings('linkedin'),
-  ])
+  const instagramListings = await fetchBoardListings('instagram')
   const instagramStats = boardStats(instagramListings)
-  const linkedinStats = boardStats(linkedinListings)
 
   return (
     <main className="analytics-page">
@@ -42,7 +38,7 @@ export default async function Analytics() {
         </div>
       </div>
 
-      <h2 className="analytics-subheading">Por board</h2>
+      <h2 className="analytics-subheading">Board</h2>
 
       <div className="analytics-boards">
         <div className="analytics-board-card">
@@ -59,24 +55,6 @@ export default async function Analytics() {
             <div>
               <span>Valor do #1</span>
               <strong>{formatCurrency(instagramStats.topBidCents)}</strong>
-            </div>
-          </div>
-        </div>
-
-        <div className="analytics-board-card">
-          <p className="eyebrow">LinkedIn</p>
-          <div className="analytics-board-stats">
-            <div>
-              <span>Perfis ativos</span>
-              <strong>{linkedinStats.count}</strong>
-            </div>
-            <div>
-              <span>Cliques (24h)</span>
-              <strong>{linkedinStats.totalClicks.toLocaleString('pt-BR')}</strong>
-            </div>
-            <div>
-              <span>Valor do #1</span>
-              <strong>{formatCurrency(linkedinStats.topBidCents)}</strong>
             </div>
           </div>
         </div>

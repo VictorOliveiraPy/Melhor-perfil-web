@@ -15,12 +15,8 @@ const PLATFORM_LABEL: Record<Platform, string> = {
   linkedin: 'LinkedIn',
 }
 
-// Página cheia de uma plataforma — spec.md seção 1: "Dois boards
-// independentes, não um único board misto". /instagram e /linkedin
-// renderizam este mesmo componente, cada um só com as entradas (e o
-// ranking) da sua plataforma. Ver também src/app/board/page.tsx: as duas
-// plataformas lado a lado numa página só, pra quem quer ver as duas sem
-// trocar de rota — visual apenas, o ranking de cada uma continua isolado.
+// Página cheia do board (/instagram) — produto focado só em Instagram
+// (decisão do usuário, 2026-08-25; LinkedIn removido de vez da UI).
 //
 // Async porque busca direto do melhorperfil-api (fetchBoardListings) — sem
 // mock, sem client-only fetch (CLAUDE.md seção 1: SSR/SSG no board

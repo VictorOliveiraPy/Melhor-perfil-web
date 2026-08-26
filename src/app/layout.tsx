@@ -5,7 +5,7 @@ import './globals.css'
 
 export const metadata = {
   title: 'melhorperfil',
-  description: 'Ranking público de perfis de Instagram e LinkedIn',
+  description: 'Ranking público de perfis de Instagram',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -23,9 +23,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
               <span className="brand-mark">melhorperfil</span>
             </a>
             <nav aria-label="Navegação principal">
-              <a href="/board">Board</a>
               <a href="/instagram">Instagram</a>
-              <a href="/linkedin">LinkedIn</a>
               <a href="/analytics">Analytics</a>
             </nav>
           </div>

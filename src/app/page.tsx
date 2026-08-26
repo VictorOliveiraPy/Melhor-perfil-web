@@ -1,35 +1,29 @@
 import Link from 'next/link'
-import CombinedBoard from '../components/CombinedBoard'
+import BoardSection from '../components/BoardSection'
 import HeroBidForm from '../components/HeroBidForm'
 import { siteAnalytics } from '../data/mockAnalytics'
-import { isPlatform, type Platform } from '../lib/platform'
 import { fetchBoardListings } from '../services/boardApiService'
 import { boardStats } from '../lib/boardStats'
 import { rankListings } from '../lib/rankListings'
 import { heroTargetBidCents } from '../lib/heroTargetBidCents'
 import { formatCurrency } from '../lib/formatCurrency'
 
-// Ver src/app/board/page.tsx pro porquê do force-dynamic explícito.
+// Precisa buscar o board antes de montar a hero (o valor mostrado depende
+// do maior lance atual — ver heroTargetBidCents) e depender de dado ao vivo
+// do melhorperfil-api — sem isso o Next congelaria a página como estática
+// no build (achado em produção 2026-08-23: build sem API_BASE_URL virou
+// HTML estático com board vazio "pra sempre").
 export const dynamic = 'force-dynamic'
 
-type Props = {
-  searchParams: { platform?: string }
-}
-
-const PLATFORMS: Platform[] = ['instagram', 'linkedin']
-
-// Async: precisa buscar os dois boards antes de montar a hero (o valor
-// mostrado depende do maior lance atual — ver heroTargetBidCents). O mesmo
-// fetchBoardListings roda de novo dentro de CombinedBoard logo abaixo; o
-// Next.js dedupa automaticamente fetches idênticos (mesma URL/opções)
-// dentro da mesma renderização (React Request Memoization), então isso não
-// dobra a chamada real de rede.
-export default async function Home({ searchParams }: Props) {
-  const filter = isPlatform(searchParams.platform) ? searchParams.platform : undefined
-
-  const listingsByPlatform = await Promise.all(PLATFORMS.map((platform) => fetchBoardListings(platform)))
-  const topBidCentsByPlatform = listingsByPlatform.map((listings) => boardStats(rankListings(listings)).topBidCents)
-  const heroAmountCents = heroTargetBidCents(topBidCentsByPlatform)
+// Produto focado só em Instagram (decisão do usuário, 2026-08-25) — LinkedIn
+// removido de vez da UI (/linkedin, /board combinado, toggle de plataforma
+// no formulário). O backend continua aceitando URL do LinkedIn sem
+// problema; só não tem mais nenhuma tela que publique lá.
+export default async function Home() {
+  const listings = await fetchBoardListings('instagram')
+  const ranked = rankListings(listings)
+  const { totalClicks, topBidCents } = boardStats(ranked)
+  const heroAmountCents = heroTargetBidCents([topBidCents])
 
   return (
     <main className="landing-shell">
@@ -65,23 +59,10 @@ export default async function Home({ searchParams }: Props) {
         Já está na lista? Cola o mesmo link e aumenta o lance. Você paga só a diferença.
       </p>
 
-      {/* Dois boards independentes (spec.md seção 1) — cada card leva pro
-          ranking daquela plataforma, não existe um "board" misto pra linkar. */}
-      <div className="hero-stats hero-stats-links">
-        <a href="/instagram">
-          <strong>Instagram</strong>
-          <span>perfil pessoal</span>
-        </a>
-        <a href="/linkedin">
-          <strong>LinkedIn</strong>
-          <span>perfil profissional</span>
-        </a>
-      </div>
-
       <section className="brand-strip" aria-label="Resumo do produto">
         <div>
           <span>Board público</span>
-          <strong>Perfis de Instagram e LinkedIn</strong>
+          <strong>Perfis de Instagram</strong>
         </div>
         <div>
           <span>Visibilidade</span>
@@ -93,11 +74,24 @@ export default async function Home({ searchParams }: Props) {
         </div>
       </section>
 
-      {/* Perfis na mesma tela da home — pedido do usuário, igual à
-          referência melhorlance.dev (o board dela também mora na home,
-          não numa rota separada). /board continua existindo à parte pra
-          quem chegar direto nele pelo nav. */}
-      <CombinedBoard filter={filter} basePath="/" headingLevel={2} />
+      <section id="board" className="board-embed" aria-label="Board de perfis do Instagram">
+        <div className="board-topbar">
+          <div>
+            <p className="eyebrow">Board</p>
+            <h2>Perfis em destaque</h2>
+          </div>
+        </div>
+
+        <div className="board-meta-row">
+          <span>Atualizado há 1 segundo</span>
+          <span>·</span>
+          <a href="#">Atualizar</a>
+          <span>·</span>
+          <span>{totalClicks.toLocaleString('pt-BR')} cliques em visibilidade</span>
+        </div>
+
+        <BoardSection listings={listings} />
+      </section>
     </main>
   )
 }

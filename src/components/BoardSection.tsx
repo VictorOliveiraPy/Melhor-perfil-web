@@ -7,13 +7,11 @@ type Props = {
   listings: BoardListing[]
 }
 
-// Pódio + lista de uma plataforma, sem heading/meta própria — usado tanto
-// por Board.tsx (página cheia de uma plataforma só) quanto por
-// src/app/board/page.tsx (as duas plataformas lado a lado, ver comentário
-// lá). O ranking é sempre calculado só a partir de `listings`: mesmo
-// quando as duas seções aparecem juntas na mesma página, Instagram e
-// LinkedIn nunca disputam a mesma lista (spec.md seção 1, "Isolamento por
-// board") — é só a visualização que fica lado a lado.
+// Pódio + lista, sem heading/meta própria — usado tanto por Board.tsx
+// (página /instagram) quanto direto na home (src/app/page.tsx). Produto
+// focado só em Instagram (decisão do usuário, 2026-08-25); o componente
+// não sabe/precisa saber de plataforma, só ranqueia o que vier em
+// `listings`.
 export default function BoardSection({ listings }: Props) {
   const ranked = rankListings(listings)
   const top3 = ranked.slice(0, 3)
