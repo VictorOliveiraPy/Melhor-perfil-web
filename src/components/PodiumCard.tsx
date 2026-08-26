@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import AvatarImage from './AvatarImage'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { profileDetailHref } from '../lib/profileDetailHref'
@@ -29,6 +30,13 @@ export default function PodiumCard({ listing }: Props) {
       </div>
 
       <div className="podium-name">
+        {/* Achado do usuário: os 3 primeiros (pódio) nunca mostravam foto —
+            não era bug do scraping/download, o componente do pódio nunca
+            teve <img> nenhum, diferente do ProfileCard usado do #4 em
+            diante. */}
+        <div className="avatar podium-avatar" aria-label={`${listing.display_name} avatar`}>
+          <AvatarImage src={listing.avatarUrl} alt={listing.display_name} />
+        </div>
         {listing.platform === 'instagram' ? <InstagramIcon size={18} /> : <LinkedInIcon size={18} />}
         <span dangerouslySetInnerHTML={{ __html: safeName }} />
       </div>

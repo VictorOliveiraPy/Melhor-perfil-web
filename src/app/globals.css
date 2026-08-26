@@ -631,6 +631,12 @@ textarea {
   color: var(--text);
 }
 
+.podium-avatar {
+  width: 32px;
+  height: 32px;
+  flex-shrink: 0;
+}
+
 .podium-bio {
   margin: 0;
   color: var(--muted);
