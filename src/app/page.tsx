@@ -1,8 +1,8 @@
-import Link from 'next/link'
 import BoardSection from '../components/BoardSection'
 import HeroBidForm from '../components/HeroBidForm'
 import { fetchSiteAnalytics } from '../services/himetricaAnalytics'
 import { fetchBoardListings } from '../services/boardApiService'
+import { HIMETRICA_SHARE_URL } from '../lib/himetricaShareUrl'
 import { boardStats } from '../lib/boardStats'
 import { rankListings } from '../lib/rankListings'
 import { heroTargetBidCents } from '../lib/heroTargetBidCents'
@@ -52,7 +52,9 @@ export default async function Home() {
               </p>
             </>
           )}
-          <Link href="/analytics">ver o analytics →</Link>
+          <a href={HIMETRICA_SHARE_URL} target="_blank" rel="noopener noreferrer">
+            ver o analytics →
+          </a>
         </div>
       </section>
 

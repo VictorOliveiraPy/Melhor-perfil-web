@@ -2,21 +2,15 @@ import { fetchBoardListings } from '../../services/boardApiService'
 import { fetchSiteAnalytics } from '../../services/himetricaAnalytics'
 import { boardStats } from '../../lib/boardStats'
 import { formatCurrency } from '../../lib/formatCurrency'
+import { HIMETRICA_SHARE_URL } from '../../lib/himetricaShareUrl'
 
-// Dashboard PÚBLICO do Himetrica (Project Settings → Public Sharing),
-// não o painel privado (/dashboard/{project}/{id}, esse sim exige login).
-// Mesmo padrão do site de referência melhorlance.dev: linka direto pro
-// share deles em vez de reconstruir o dashboard aqui. Slug fixo (não sai
-// de env var — é só uma URL pública, sem credencial nenhuma envolvida).
-const HIMETRICA_SHARE_URL = 'https://www.himetrica.com/share/melhor-perfil-j8bkxhzb6-melhor-perfil.vercel.app'
-
-// Analytics próprio do melhorperfil — o link "ver o analytics" da home
-// linkava direto pro dashboard público do melhorlance.dev (site de
-// referência), o que não faz sentido: são produtos diferentes. Números de
-// tráfego (pessoas online, visitantes, país) vêm da Read API do Himetrica
-// (himetricaAnalytics.ts) — só agregado, nunca IP nem dado por visitante
-// individual (decisão do usuário 2026-08-28: essa página é pública). O
-// recorte por board já vem do melhorperfil-api.
+// Achado 2026-08-28: os links "Analytics" do nav e "ver o analytics" da
+// home não passam mais por aqui — vão direto pro dashboard público do
+// Himetrica (HIMETRICA_SHARE_URL), igual o site de referência
+// melhorlance.dev. Esta página fica só acessível por URL direta, com o
+// recorte de board (perfis ativos/cliques/valor do #1) que o Himetrica não
+// tem, mais os mesmos números agregados (himetricaAnalytics.ts) e um link
+// pro mesmo dashboard público no fim.
 export const dynamic = 'force-dynamic'
 
 export default async function Analytics() {
