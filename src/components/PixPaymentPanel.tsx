@@ -5,6 +5,12 @@ import { fetchListingStatus } from '../services/listingStatusService'
 
 type Props = {
   listingId: number
+  // public_token da BidTransaction gerada por este lance/reforço/takeover
+  // (BidResult.transactionId) — usado no polling pra checar SE ESTE PIX
+  // específico foi pago, não o status agregado do listing (achado em
+  // produção 2026-08-27, spec.md seção 7: numa entrada já "ativa", o
+  // status do listing não muda até o reforço/ultrapassagem ser aplicado).
+  transactionId: string
   qrCode: string
   qrCodeBase64: string
   onConfirmed: () => void
@@ -21,7 +27,7 @@ const POLL_INTERVAL_MS = 3000
 // setTimeout recursivo (agenda a próxima chamada só depois da anterior
 // terminar), não setInterval — evita empilhar requisições se uma demorar
 // mais que POLL_INTERVAL_MS.
-export default function PixPaymentPanel({ listingId, qrCode, qrCodeBase64, onConfirmed }: Props) {
+export default function PixPaymentPanel({ listingId, transactionId, qrCode, qrCodeBase64, onConfirmed }: Props) {
   const [copied, setCopied] = useState(false)
   const onConfirmedRef = useRef(onConfirmed)
   onConfirmedRef.current = onConfirmed
@@ -31,10 +37,15 @@ export default function PixPaymentPanel({ listingId, qrCode, qrCodeBase64, onCon
     let timeoutId: ReturnType<typeof setTimeout>
 
     async function poll() {
-      const result = await fetchListingStatus(listingId)
+      const result = await fetchListingStatus(listingId, transactionId)
       if (cancelled) return
 
-      if (result?.status === 'ativa') {
+      // transactionStatus é da TRANSAÇÃO específica (?transactionId=), não
+      // do listing inteiro — `status` do listing pode já estar "ativa" por
+      // causa de uma entrada anterior (achado em produção 2026-08-27,
+      // spec.md seção 7). Confiar em `status` aqui fechava o QR como
+      // "confirmado" antes do Pix novo ser pago de fato.
+      if (result?.transactionStatus === 'paga') {
         onConfirmedRef.current()
         return
       }
@@ -48,7 +59,7 @@ export default function PixPaymentPanel({ listingId, qrCode, qrCodeBase64, onCon
       cancelled = true
       clearTimeout(timeoutId)
     }
-  }, [listingId])
+  }, [listingId, transactionId])
 
   async function handleCopy() {
     try {

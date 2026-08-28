@@ -3,6 +3,11 @@ import type { Platform } from '../lib/platform'
 
 export type BidResult = {
   listingId: number
+  // public_token da BidTransaction (UUID opaco, não o PK sequencial) — é o
+  // que PixPaymentPanel manda de volta em ?transactionId= no polling de
+  // status pra saber se ESTE Pix específico foi pago, em vez do `status`
+  // agregado do listing (achado em produção 2026-08-27, spec.md seção 7).
+  transactionId: string
   chargedCents: number
   isReinforcement: boolean
   newTotalCents: number

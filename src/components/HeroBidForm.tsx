@@ -81,6 +81,7 @@ export default function HeroBidForm() {
     return (
       <PixPaymentPanel
         listingId={pendingBid.listingId}
+        transactionId={pendingBid.transactionId}
         qrCode={pendingBid.pixQrCode}
         qrCodeBase64={pendingBid.pixQrCodeBase64}
         onConfirmed={handlePaymentConfirmed}

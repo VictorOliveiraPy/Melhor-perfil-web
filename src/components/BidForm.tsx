@@ -173,6 +173,7 @@ export default function BidForm({ currentBidCents, platform = 'instagram' }: Pro
             ) : (
               <PixPaymentPanel
                 listingId={bidResult.listingId}
+                transactionId={bidResult.transactionId}
                 qrCode={bidResult.pixQrCode}
                 qrCodeBase64={bidResult.pixQrCodeBase64}
                 onConfirmed={handlePaymentConfirmed}
