@@ -3,6 +3,16 @@ import { fetchSiteAnalytics } from '../../services/himetricaAnalytics'
 import { boardStats } from '../../lib/boardStats'
 import { formatCurrency } from '../../lib/formatCurrency'
 
+// Painel completo do Himetrica exige login da conta dona do projeto —
+// qualquer visitante que clique cai na tela de login deles, não vê nada
+// (decisão do usuário 2026-08-28: manter /analytics público e agregado,
+// mas com esse link a mais só pra quem tem a senha). Construído a partir
+// do mesmo HIMETRICA_PROJECT_ID já usado pra consultar a Read API — "melhorperfil"
+// é o slug do projeto no Himetrica (URL deles, não muda junto com o ID).
+const HIMETRICA_DASHBOARD_URL = process.env.HIMETRICA_PROJECT_ID
+  ? `https://www.himetrica.com/dashboard/melhorperfil/${process.env.HIMETRICA_PROJECT_ID}`
+  : null
+
 // Analytics próprio do melhorperfil — o link "ver o analytics" da home
 // linkava direto pro dashboard público do melhorlance.dev (site de
 // referência), o que não faz sentido: são produtos diferentes. Números de
@@ -80,6 +90,14 @@ export default async function Analytics() {
           </div>
         </div>
       </div>
+
+      {HIMETRICA_DASHBOARD_URL && (
+        <p className="analytics-admin-link">
+          <a href={HIMETRICA_DASHBOARD_URL} target="_blank" rel="noopener noreferrer">
+            painel completo (login necessário) →
+          </a>
+        </p>
+      )}
     </main>
   )
 }

@@ -419,6 +419,15 @@ textarea {
   gap: 16px;
 }
 
+.analytics-admin-link {
+  margin-top: 32px;
+  font-size: 0.8rem;
+}
+
+.analytics-admin-link a {
+  color: var(--muted);
+}
+
 .analytics-board-card {
   padding: 18px;
   border: 1px solid var(--line);
