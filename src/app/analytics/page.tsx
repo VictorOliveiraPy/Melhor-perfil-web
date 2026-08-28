@@ -3,15 +3,12 @@ import { fetchSiteAnalytics } from '../../services/himetricaAnalytics'
 import { boardStats } from '../../lib/boardStats'
 import { formatCurrency } from '../../lib/formatCurrency'
 
-// Painel completo do Himetrica exige login da conta dona do projeto —
-// qualquer visitante que clique cai na tela de login deles, não vê nada
-// (decisão do usuário 2026-08-28: manter /analytics público e agregado,
-// mas com esse link a mais só pra quem tem a senha). Construído a partir
-// do mesmo HIMETRICA_PROJECT_ID já usado pra consultar a Read API — "melhorperfil"
-// é o slug do projeto no Himetrica (URL deles, não muda junto com o ID).
-const HIMETRICA_DASHBOARD_URL = process.env.HIMETRICA_PROJECT_ID
-  ? `https://www.himetrica.com/dashboard/melhorperfil/${process.env.HIMETRICA_PROJECT_ID}`
-  : null
+// Dashboard PÚBLICO do Himetrica (Project Settings → Public Sharing),
+// não o painel privado (/dashboard/{project}/{id}, esse sim exige login).
+// Mesmo padrão do site de referência melhorlance.dev: linka direto pro
+// share deles em vez de reconstruir o dashboard aqui. Slug fixo (não sai
+// de env var — é só uma URL pública, sem credencial nenhuma envolvida).
+const HIMETRICA_SHARE_URL = 'https://www.himetrica.com/share/melhor-perfil-j8bkxhzb6-melhor-perfil.vercel.app'
 
 // Analytics próprio do melhorperfil — o link "ver o analytics" da home
 // linkava direto pro dashboard público do melhorlance.dev (site de
@@ -91,13 +88,11 @@ export default async function Analytics() {
         </div>
       </div>
 
-      {HIMETRICA_DASHBOARD_URL && (
-        <p className="analytics-admin-link">
-          <a href={HIMETRICA_DASHBOARD_URL} target="_blank" rel="noopener noreferrer">
-            painel completo (login necessário) →
-          </a>
-        </p>
-      )}
+      <p className="analytics-admin-link">
+        <a href={HIMETRICA_SHARE_URL} target="_blank" rel="noopener noreferrer">
+          painel completo do Himetrica →
+        </a>
+      </p>
     </main>
   )
 }
