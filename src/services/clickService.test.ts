@@ -24,6 +24,21 @@ describe('registerCardClick', () => {
     vi.stubGlobal('fetch', vi.fn().mockRejectedValue(new Error('network down')))
 
     // When / Then
-    expect(() => registerCardClick('42')).not.toThrow()
+    await expect(registerCardClick('42')).resolves.toBeUndefined()
+  })
+
+  it('should resolve once the request settles, so the caller can refresh after', async () => {
+    // Given: achado em produção 2026-08-28 — o card não atualizava sozinho
+    // porque quem chamava não esperava nada pra disparar router.refresh().
+    // Devolver uma Promise deixa isso encadeável sem bloquear a navegação
+    // (o <a target="_blank"> já abre a aba real de qualquer jeito).
+    vi.stubGlobal('fetch', vi.fn().mockResolvedValue({ ok: true }))
+
+    // When
+    const result = registerCardClick('42')
+
+    // Then
+    expect(result).toBeInstanceOf(Promise)
+    await expect(result).resolves.toBeUndefined()
   })
 })

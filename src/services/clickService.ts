@@ -1,16 +1,21 @@
 // Clique num card registra evento (spec.md do melhorperfil-api, seção 4/7,
 // item 6) — chamado do onClick do link real do perfil, que abre em nova
-// aba (target="_blank"). Best-effort igual trackEvent(): nunca pode
-// atrapalhar a navegação real, então não é `await`ado por quem chama, e
-// falha silenciosa. `keepalive: true` porque, mesmo com target="_blank" não
-// navegando a aba atual, o clique costuma vir junto de outras interações
-// rápidas — mantém a request viva se o browser decidir descartar contexto
-// de fetch em algum caso extremo.
-export function registerCardClick(listingId: string): void {
+// aba (target="_blank"). Best-effort igual trackEvent(): nunca lança, falha
+// silenciosa. Devolve uma Promise (sempre resolve, nunca rejeita) — achado
+// em produção 2026-08-28: o contador no card não atualizava sozinho porque
+// quem chamava não tinha como saber quando encadear router.refresh(); não
+// bloqueia a navegação real, que é o próprio <a target="_blank"> do
+// browser, independente desta Promise. `keepalive: true` mantém a request
+// viva mesmo se o browser decidir descartar contexto de fetch em algum
+// caso extremo.
+export function registerCardClick(listingId: string): Promise<void> {
   try {
-    fetch(`/api/listings/${listingId}/click`, { method: 'POST', keepalive: true }).catch(() => {})
+    return fetch(`/api/listings/${listingId}/click`, { method: 'POST', keepalive: true })
+      .then(() => undefined)
+      .catch(() => undefined)
   } catch {
     // fetch nunca deveria lançar de forma síncrona, mas por garantia —
     // clique nunca pode quebrar a navegação pro perfil real.
+    return Promise.resolve()
   }
 }

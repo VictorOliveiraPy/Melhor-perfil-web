@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import AvatarImage from './AvatarImage'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
@@ -37,10 +38,23 @@ export default function ProfileCard({
   clicks24h = 0,
   timeLabel = 'há 1 hora',
 }: Props) {
+  const router = useRouter()
   const safeName = sanitizeDisplayName(display_name)
   const safeBio = sanitizeDisplayName(bio)
   const url = (profileUrl && normalizeProfileUrl(profileUrl)) || '#'
   const platformLabel = platform === 'linkedin' ? 'LinkedIn' : platform === 'instagram' ? 'Instagram' : ''
+
+  // Achado em produção 2026-08-28: o board é montado uma vez no carregamento
+  // (Server Component) — sem isso, o contador de cliques do card nunca
+  // atualizava sozinho, só dava pra ver o valor novo dando refresh manual
+  // na página. O <a target="_blank"> já abre a aba do perfil real de
+  // qualquer jeito, sem depender desta função — refresh() só re-busca o
+  // board depois que o clique termina de gravar (registerCardClick sempre
+  // resolve, nunca rejeita).
+  function handleProfileLinkClick() {
+    if (!id) return
+    registerCardClick(id).then(() => router.refresh())
+  }
 
   return (
     <div className="profile-info listing-card">
@@ -68,13 +82,7 @@ export default function ProfileCard({
             <span dangerouslySetInnerHTML={{ __html: safeBio || 'Sem bio disponível' }} />
           </div>
 
-          <a
-            className="profile-link"
-            href={url}
-            target="_blank"
-            rel="noreferrer noopener"
-            onClick={() => id && registerCardClick(id)}
-          >
+          <a className="profile-link" href={url} target="_blank" rel="noreferrer noopener" onClick={handleProfileLinkClick}>
             @{profileHandle || 'perfil'}
           </a>
         </div>
