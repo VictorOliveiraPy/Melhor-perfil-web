@@ -616,6 +616,28 @@ textarea {
   background: var(--accent-tonal-bg);
 }
 
+/* Achado 2026-08-28: .podium-card virou o <div> externo (precisa ficar
+   position:relative pro overlay do selo); o <a> que abre o Instagram real
+   agora é quem carrega o conteúdo — display:contents faz ele não competir
+   como uma segunda caixa flex, só repassa o layout column/gap do pai pros
+   filhos dele, mantendo o visual idêntico a antes. */
+.podium-card-link {
+  display: contents;
+  color: inherit;
+  text-decoration: none;
+}
+
+/* "selo" não pode ficar aninhado dentro do <a> que abre o Instagram (<a>
+   dentro de <a> é inválido) — vira um link separado, sobreposto no mesmo
+   canto onde ficava antes (dentro de .podium-top, ao lado do contador de
+   cliques). */
+.podium-selo-overlay {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  z-index: 1;
+}
+
 .podium-top {
   display: flex;
   align-items: center;

@@ -1,9 +1,13 @@
+'use client'
+
 import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import AvatarImage from './AvatarImage'
 import BidForm from './BidForm'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
+import { registerCardClick } from '../services/clickService'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 import type { BoardListing } from '../lib/boardListing'
 import type { Platform } from '../lib/platform'
@@ -24,10 +28,17 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 // do board (PodiumCard/ProfileCard) leva — único lugar onde o BidForm
 // completo aparece de fato.
 export default function ProfileDetail({ platform, listing }: Props) {
+  const router = useRouter()
   const safeName = sanitizeDisplayName(listing.display_name)
   const safeBio = sanitizeDisplayName(listing.bio)
   const url = normalizeProfileUrl(listing.profileUrl) || '#'
   const platformLabel = PLATFORM_LABEL[platform]
+
+  // Mesma lacuna do PodiumCard/ProfileCard (achado 2026-08-28): esse link
+  // real pro Instagram não registrava clique nenhum.
+  function handleProfileLinkClick() {
+    registerCardClick(listing.id).then(() => router.refresh())
+  }
 
   return (
     <main className="profile-detail-page">
@@ -56,7 +67,7 @@ export default function ProfileDetail({ platform, listing }: Props) {
 
             <p className="profile-meta" dangerouslySetInnerHTML={{ __html: safeBio || 'Sem bio disponível' }} />
 
-            <a className="profile-link" href={url} target="_blank" rel="noreferrer noopener">
+            <a className="profile-link" href={url} target="_blank" rel="noreferrer noopener" onClick={handleProfileLinkClick}>
               @{listing.profileHandle}
             </a>
           </div>
