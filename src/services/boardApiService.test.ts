@@ -30,6 +30,7 @@ describe('fetchBoardListings', () => {
           status: 'ativa',
           created_at: '2026-08-23T12:00:00Z',
           avatarUrl: null,
+          clicks24h: 7,
         },
       ],
     }
@@ -38,7 +39,8 @@ describe('fetchBoardListings', () => {
     // When
     const listings = await fetchBoardListings('instagram')
 
-    // Then
+    // Then: clicks24h vem de verdade da API (achado 2026-08-28: ficava
+    // hardcoded em 0 aqui, mesmo o backend já calculando o valor real).
     expect(listings).toEqual([
       {
         id: '42',
@@ -49,7 +51,7 @@ describe('fetchBoardListings', () => {
         profileHandle: 'joao.silva',
         profileUrl: 'instagram.com/joao.silva',
         avatarUrl: undefined,
-        clicks24h: 0,
+        clicks24h: 7,
         timeLabel: expect.any(String),
       },
     ])

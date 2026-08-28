@@ -1,9 +1,12 @@
+'use client'
+
 import Link from 'next/link'
 import AvatarImage from './AvatarImage'
 import { sanitizeDisplayName } from '../lib/sanitize'
 import { formatCurrency } from '../lib/formatCurrency'
 import { normalizeProfileUrl } from '../lib/normalizeProfileUrl'
 import { profileDetailHref } from '../lib/profileDetailHref'
+import { registerCardClick } from '../services/clickService'
 import type { Platform } from '../lib/platform'
 import { InstagramIcon, LinkedInIcon } from './icons/PlatformIcons'
 
@@ -65,7 +68,13 @@ export default function ProfileCard({
             <span dangerouslySetInnerHTML={{ __html: safeBio || 'Sem bio disponível' }} />
           </div>
 
-          <a className="profile-link" href={url} target="_blank" rel="noreferrer noopener">
+          <a
+            className="profile-link"
+            href={url}
+            target="_blank"
+            rel="noreferrer noopener"
+            onClick={() => id && registerCardClick(id)}
+          >
             @{profileHandle || 'perfil'}
           </a>
         </div>

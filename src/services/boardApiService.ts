@@ -13,6 +13,9 @@ type ApiListingItem = {
   status: string
   created_at: string
   avatarUrl: string | null
+  // Opcional (não obrigatório): resiliente a um deploy do backend ainda
+  // não ter esse campo — nunca quebra o board por causa disso, só mostra 0.
+  clicks24h?: number
 }
 
 type BoardApiResponse = {
@@ -38,7 +41,11 @@ function mapApiItem(item: ApiListingItem): BoardListing {
     // devolve null quando não tem foto ainda; BoardListing.avatarUrl é
     // opcional (undefined), não null — por isso o ?? undefined.
     avatarUrl: item.avatarUrl ?? undefined,
-    clicks24h: 0,
+    // Achado 2026-08-28: ficava hardcoded em 0 mesmo o backend já
+    // calculando o valor real (ClickEvent existia no model desde o início,
+    // sem nada gravando nem lendo — POST /listings/{id}/click, ver
+    // clickService.ts, fecha o ciclo).
+    clicks24h: item.clicks24h ?? 0,
     timeLabel: formatRelativeTime(item.created_at),
   }
 }
