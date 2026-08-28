@@ -1,18 +1,19 @@
 import { fetchBoardListings } from '../../services/boardApiService'
-import { siteAnalytics } from '../../data/mockAnalytics'
+import { fetchSiteAnalytics } from '../../services/himetricaAnalytics'
 import { boardStats } from '../../lib/boardStats'
 import { formatCurrency } from '../../lib/formatCurrency'
 
 // Analytics próprio do melhorperfil — o link "ver o analytics" da home
 // linkava direto pro dashboard público do melhorlance.dev (site de
 // referência), o que não faz sentido: são produtos diferentes. Números de
-// tráfego do site (pessoas online, visitantes) continuam de demonstração —
-// dependem de uma integração de analytics real (Umami, spec.md seção 12)
-// que ainda não existe. O recorte por board já vem do melhorperfil-api.
+// tráfego (pessoas online, visitantes, país) vêm da Read API do Himetrica
+// (himetricaAnalytics.ts) — só agregado, nunca IP nem dado por visitante
+// individual (decisão do usuário 2026-08-28: essa página é pública). O
+// recorte por board já vem do melhorperfil-api.
 export const dynamic = 'force-dynamic'
 
 export default async function Analytics() {
-  const instagramListings = await fetchBoardListings('instagram')
+  const [instagramListings, analytics] = await Promise.all([fetchBoardListings('instagram'), fetchSiteAnalytics()])
   const instagramStats = boardStats(instagramListings)
 
   return (
@@ -23,20 +24,40 @@ export default async function Analytics() {
         Números públicos de visibilidade — os mesmos que valem pra decidir se compensa pagar por uma posição no board.
       </p>
 
-      <div className="hero-stats">
-        <div>
-          <strong>{siteAnalytics.peopleOnline}</strong>
-          <span>pessoas online agora</span>
-        </div>
-        <div>
-          <strong>{siteAnalytics.visitors.toLocaleString('pt-BR')}</strong>
-          <span>visitantes desde o lançamento</span>
-        </div>
-        <div>
-          <strong>{siteAnalytics.pageviews.toLocaleString('pt-BR')}</strong>
-          <span>pageviews desde o lançamento</span>
-        </div>
-      </div>
+      {analytics ? (
+        <>
+          <div className="hero-stats">
+            <div>
+              <strong>{analytics.peopleOnline}</strong>
+              <span>pessoas online agora</span>
+            </div>
+            <div>
+              <strong>{analytics.visitors.toLocaleString('pt-BR')}</strong>
+              <span>visitantes desde o lançamento</span>
+            </div>
+            <div>
+              <strong>{analytics.pageviews.toLocaleString('pt-BR')}</strong>
+              <span>pageviews desde o lançamento</span>
+            </div>
+          </div>
+
+          {analytics.countries.length > 0 && (
+            <>
+              <h2 className="analytics-subheading">De onde vêm os visitantes</h2>
+              <div className="analytics-boards">
+                {analytics.countries.map((item) => (
+                  <div key={item.country} className="analytics-board-card">
+                    <p className="eyebrow">{item.country}</p>
+                    <strong>{item.percentage}%</strong>
+                  </div>
+                ))}
+              </div>
+            </>
+          )}
+        </>
+      ) : (
+        <p className="profile-preview-fallback-note">Números de tráfego indisponíveis no momento.</p>
+      )}
 
       <h2 className="analytics-subheading">Board</h2>
 

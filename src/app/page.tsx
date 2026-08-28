@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import BoardSection from '../components/BoardSection'
 import HeroBidForm from '../components/HeroBidForm'
-import { siteAnalytics } from '../data/mockAnalytics'
+import { fetchSiteAnalytics } from '../services/himetricaAnalytics'
 import { fetchBoardListings } from '../services/boardApiService'
 import { boardStats } from '../lib/boardStats'
 import { rankListings } from '../lib/rankListings'
@@ -20,7 +20,7 @@ export const dynamic = 'force-dynamic'
 // no formulário). O backend continua aceitando URL do LinkedIn sem
 // problema; só não tem mais nenhuma tela que publique lá.
 export default async function Home() {
-  const listings = await fetchBoardListings('instagram')
+  const [listings, analytics] = await Promise.all([fetchBoardListings('instagram'), fetchSiteAnalytics()])
   const ranked = rankListings(listings)
   const { totalClicks, topBidCents } = boardStats(ranked)
   const heroAmountCents = heroTargetBidCents([topBidCents])
@@ -34,16 +34,24 @@ export default async function Home() {
         </p>
 
         {/* Analytics próprio (src/app/analytics) — não linka mais pro
-            dashboard do melhorlance.dev, o site de referência. */}
+            dashboard do melhorlance.dev, o site de referência. Dado real via
+            Read API do Himetrica (himetricaAnalytics.ts); sem número
+            inventado se a API não responder — só omite as linhas, mantém o
+            link (achado 2026-08-28: mock fixo aqui já tinha saído de sincronia
+            com o real assim que /analytics passou a mostrar dado de verdade). */}
         <div className="proof-card" aria-label="Indicadores de tráfego">
-          <p>
-            <span className="proof-dot" aria-hidden />
-            <strong>{siteAnalytics.peopleOnline}</strong>&nbsp;pessoas online agora
-          </p>
-          <p>
-            <strong>{siteAnalytics.visitors.toLocaleString('pt-BR')}</strong> visitantes &amp;{' '}
-            {siteAnalytics.pageviews.toLocaleString('pt-BR')} pageviews desde o lançamento
-          </p>
+          {analytics && (
+            <>
+              <p>
+                <span className="proof-dot" aria-hidden />
+                <strong>{analytics.peopleOnline}</strong>&nbsp;pessoas online agora
+              </p>
+              <p>
+                <strong>{analytics.visitors.toLocaleString('pt-BR')}</strong> visitantes &amp;{' '}
+                {analytics.pageviews.toLocaleString('pt-BR')} pageviews desde o lançamento
+              </p>
+            </>
+          )}
           <Link href="/analytics">ver o analytics →</Link>
         </div>
       </section>
