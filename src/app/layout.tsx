@@ -1,7 +1,6 @@
 import type { ReactNode } from 'react'
 import Script from 'next/script'
 import { fontDisplay, fontMono, fontSans } from './fonts'
-import { HIMETRICA_SHARE_URL } from '../lib/himetricaShareUrl'
 import './globals.css'
 
 export const metadata = {
@@ -25,9 +24,6 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             </a>
             <nav aria-label="Navegação principal">
               <a href="/instagram">Instagram</a>
-              <a href={HIMETRICA_SHARE_URL} target="_blank" rel="noopener noreferrer">
-                Analytics
-              </a>
             </nav>
           </div>
         </header>
