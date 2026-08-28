@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 import { fetchListingStatus } from '../services/listingStatusService'
+import { isPaymentConfirmed } from '../lib/isPaymentConfirmed'
 
 type Props = {
   listingId: number
@@ -40,12 +41,12 @@ export default function PixPaymentPanel({ listingId, transactionId, qrCode, qrCo
       const result = await fetchListingStatus(listingId, transactionId)
       if (cancelled) return
 
-      // transactionStatus é da TRANSAÇÃO específica (?transactionId=), não
-      // do listing inteiro — `status` do listing pode já estar "ativa" por
-      // causa de uma entrada anterior (achado em produção 2026-08-27,
-      // spec.md seção 7). Confiar em `status` aqui fechava o QR como
-      // "confirmado" antes do Pix novo ser pago de fato.
-      if (result?.transactionStatus === 'paga') {
+      // isPaymentConfirmed (src/lib) checa a TRANSAÇÃO específica
+      // (?transactionId=), não o listing inteiro — `status` do listing pode
+      // já estar "ativa" por causa de uma entrada anterior (achado em
+      // produção 2026-08-27, spec.md seção 7). Confiar em `status` aqui
+      // fechava o QR como "confirmado" antes do Pix novo ser pago de fato.
+      if (isPaymentConfirmed(result?.transactionStatus ?? null)) {
         onConfirmedRef.current()
         return
       }
