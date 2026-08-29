@@ -926,6 +926,16 @@ textarea {
   color: var(--text);
 }
 
+/* Achado 2026-08-29 (revisão de responsividade): placeholder longo tipo
+   "@seuarroba ou instagram.com/seuusuario" cortava no meio da palavra, sem
+   reticências, em telas de celular (~375px) — só em `input` (não
+   `textarea`, que precisa quebrar linha pro texto da bio). */
+input {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 input::placeholder,
 textarea::placeholder {
   color: var(--muted);
@@ -1273,13 +1283,6 @@ textarea {
   .board-topbar {
     flex-direction: column;
     align-items: flex-start;
-  }
-
-  .shell-header {
-    flex-direction: column;
-    justify-content: center;
-    gap: 12px;
-    padding: 12px 0 14px;
   }
 }
 
