@@ -1,11 +1,38 @@
+import type { Metadata } from 'next'
 import type { ReactNode } from 'react'
 import Script from 'next/script'
 import { fontDisplay, fontMono, fontSans } from './fonts'
+import { SITE_URL } from '../lib/siteUrl'
 import './globals.css'
 
-export const metadata = {
-  title: 'melhorperfil',
-  description: 'Ranking público de perfis de Instagram',
+const TITLE = 'melhorperfil — dispute o topo do ranking de perfis do Instagram'
+const DESCRIPTION =
+  'Leaderboard público de perfis brasileiros do Instagram. Lance pra subir no ranking e ganhar visibilidade — o #1 muda a qualquer hora.'
+
+// metadataBase resolve as URLs relativas de OG/Twitter (imagem, canonical)
+// pro domínio de produção — sem isso o Next cai no host do próprio deploy
+// (ex: *.vercel.app) em vez de melhorperfil.com.br quando renderizado fora
+// de produção (preview, local).
+export const metadata: Metadata = {
+  metadataBase: new URL(SITE_URL),
+  title: {
+    default: TITLE,
+    template: '%s | melhorperfil',
+  },
+  description: DESCRIPTION,
+  openGraph: {
+    title: TITLE,
+    description: DESCRIPTION,
+    url: SITE_URL,
+    siteName: 'melhorperfil',
+    locale: 'pt_BR',
+    type: 'website',
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: TITLE,
+    description: DESCRIPTION,
+  },
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
