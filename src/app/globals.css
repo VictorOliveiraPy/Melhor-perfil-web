@@ -1292,3 +1292,50 @@ textarea {
 .gap-8 { gap: 8px; }
 .text-muted { color: var(--muted); }
 .sr-only { position: absolute !important; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+
+/* Banner de instalação do PWA (InstallPwaBanner) — fixo no rodapé, some
+   sozinho se dispensado (soneca de 14 dias, ver shouldShowInstallBanner.ts)
+   ou depois de instalado (evento appinstalled). */
+.install-banner {
+  position: fixed;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  z-index: 30;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  background: var(--text);
+  color: #fff;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.18);
+}
+
+.install-banner-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.install-banner-dismiss {
+  background: transparent;
+  border: none;
+  color: #fff;
+  opacity: 0.7;
+  cursor: pointer;
+  font-size: 1rem;
+  padding: 4px;
+  line-height: 1;
+}
+
+@media (max-width: 480px) {
+  .install-banner {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+  }
+}

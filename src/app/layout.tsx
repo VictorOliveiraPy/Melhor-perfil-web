@@ -1,8 +1,10 @@
-import type { Metadata } from 'next'
+import type { Metadata, Viewport } from 'next'
 import type { ReactNode } from 'react'
 import Script from 'next/script'
 import { fontDisplay, fontMono, fontSans } from './fonts'
 import { SITE_URL } from '../lib/siteUrl'
+import ServiceWorkerRegistration from '../components/ServiceWorkerRegistration'
+import InstallPwaBanner from '../components/InstallPwaBanner'
 import './globals.css'
 
 const TITLE = 'melhorperfil — dispute o topo do ranking de perfis do Instagram'
@@ -33,6 +35,23 @@ export const metadata: Metadata = {
     title: TITLE,
     description: DESCRIPTION,
   },
+  manifest: '/manifest.webmanifest',
+  // capable: true tira a barra do Safari quando adicionado à tela de
+  // início do iOS — mesmo efeito do display:'standalone' do manifest.ts,
+  // que o iOS não lê.
+  appleWebApp: {
+    capable: true,
+    statusBarStyle: 'default',
+    title: 'melhorperfil',
+  },
+}
+
+// themeColor mora em viewport (não em metadata) desde o Next 14 — pinta a
+// barra de status/endereço do navegador na cor da marca quando instalado.
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#5b4bdb',
 }
 
 export default function RootLayout({ children }: { children: ReactNode }) {
@@ -69,6 +88,8 @@ export default function RootLayout({ children }: { children: ReactNode }) {
             data-api-key={process.env.NEXT_PUBLIC_HIMETRICA_API_KEY}
           />
         )}
+        <ServiceWorkerRegistration />
+        <InstallPwaBanner />
       </body>
     </html>
   )

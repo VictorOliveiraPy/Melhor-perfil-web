@@ -2,5 +2,11 @@
   "extends": ["next/core-web-vitals", "eslint:recommended"],
   "rules": {
     "no-unused-vars": "warn"
-  }
+  },
+  "overrides": [
+    {
+      "files": ["public/sw.js"],
+      "env": { "serviceworker": true, "es2021": true }
+    }
+  ]
 }
