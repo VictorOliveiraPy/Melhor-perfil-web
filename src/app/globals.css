@@ -282,28 +282,82 @@ textarea {
   font: inherit;
 }
 
-.hero-entry-row {
-  margin-top: 10px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
+/* Card com destaque próprio ao redor do ponto de entrada principal do site
+   (onde a pessoa cola o link pra entrar no ranking) — achado do usuário
+   testando no ar: os campos abaixo tinham fundo quase 100% transparente
+   (rgba(255,255,255,0.02), sobra de um tema escuro anterior) sobre o fundo
+   cinza-claro (--bg), praticamente invisíveis como campo clicável. Card
+   próprio + rótulo visível corrigem isso sem contrariar a decisão de
+   "sem reforma de design" (spec.md seção 4) — só damos contraste real a um
+   campo que já deveria ter um, do mesmo jeito que .bid-form já faz. */
+.hero-form-card {
+  margin-top: 14px;
   max-width: 840px;
+  padding: 18px;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--line);
+  background: var(--panel);
+  box-shadow: 0 8px 24px rgba(19, 18, 21, 0.06);
+}
+
+.hero-entry-row {
+  display: flex;
+  align-items: flex-end;
+  gap: 12px;
+}
+
+.hero-field-group {
+  flex: 1;
+  display: grid;
+  gap: 6px;
+  min-width: 0;
+}
+
+.hero-field-group.hero-field-amount {
+  flex: none;
+  width: 150px;
+}
+
+.hero-field-group label {
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 600;
 }
 
 .hero-entry-row input {
   flex: 1;
   min-height: 58px;
+  width: 100%;
   border: 1px solid var(--line);
   border-radius: var(--radius-md);
-  background: rgba(255, 255, 255, 0.02);
+  background: var(--panel);
   color: var(--text);
   padding: 0 18px;
   outline: none;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.hero-entry-row input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 3px var(--accent-tonal-bg);
 }
 
 .hero-entry-row input.hero-amount-input {
-  flex: none;
-  width: 120px;
+  padding-left: 38px;
+}
+
+.hero-amount-wrap {
+  position: relative;
+}
+
+.hero-amount-wrap .currency-prefix {
+  position: absolute;
+  left: 16px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--muted);
+  font-size: 0.9rem;
+  pointer-events: none;
 }
 
 .hero-entry-row input::placeholder {
@@ -314,6 +368,12 @@ textarea {
   min-height: 58px;
   padding: 0 22px;
   border-radius: var(--radius-md);
+}
+
+.hero-form-hint {
+  margin: 10px 2px 0;
+  color: var(--muted);
+  font-size: 0.8rem;
 }
 
 .subtext {
@@ -1254,7 +1314,7 @@ textarea {
     align-items: stretch;
   }
 
-  .hero-entry-row input.hero-amount-input {
+  .hero-field-group.hero-field-amount {
     width: 100%;
   }
 

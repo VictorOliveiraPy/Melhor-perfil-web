@@ -90,24 +90,34 @@ export default function HeroBidForm() {
   }
 
   return (
-    <form onSubmit={handleSubmit} aria-label="Formulário de submissão do perfil">
+    <form onSubmit={handleSubmit} aria-label="Formulário de submissão do perfil" className="hero-form-card">
       <div className="hero-entry-row">
-        <input
-          type="text"
-          value={profileInput}
-          onChange={(event) => setProfileInput(event.target.value)}
-          placeholder="@seuarroba ou instagram.com/seuusuario"
-          aria-label="Link do perfil ou @arroba"
-        />
-        <input
-          type="number"
-          min="1"
-          step="1"
-          value={amount}
-          onChange={(event) => setAmount(event.target.value)}
-          className="hero-amount-input"
-          aria-label="Valor do lance em reais"
-        />
+        <div className="hero-field-group">
+          <label htmlFor="hero-profile-input">Link do perfil</label>
+          <input
+            id="hero-profile-input"
+            type="text"
+            value={profileInput}
+            onChange={(event) => setProfileInput(event.target.value)}
+            placeholder="@seuarroba ou instagram.com/seuusuario"
+          />
+        </div>
+        <div className="hero-field-group hero-field-amount">
+          <label htmlFor="hero-amount-input">Seu lance</label>
+          <div className="hero-amount-wrap">
+            <span className="currency-prefix" aria-hidden>R$</span>
+            <input
+              id="hero-amount-input"
+              type="number"
+              min="1"
+              step="1"
+              value={amount}
+              onChange={(event) => setAmount(event.target.value)}
+              className="hero-amount-input"
+              aria-label="Valor do lance em reais"
+            />
+          </div>
+        </div>
         <button type="submit" className="primary-button" disabled={!canSubmit || isSubmitting}>
           {isSubmitting ? 'Gerando cobrança…' : 'Pegar o #1'}
         </button>
@@ -116,6 +126,9 @@ export default function HeroBidForm() {
       {!urlIsValid && profileInput && <small className="field-error">Perfil inválido para Instagram.</small>}
       {submitError && <p className="field-error">{submitError}</p>}
       {submitSuccess && <p className="field-success">Pagamento confirmado! Já aparece no board aqui embaixo. ↓</p>}
+      {!submitError && !submitSuccess && (
+        <p className="hero-form-hint">Cole o link, escolhe o valor e paga com Pix — o perfil entra no ranking assim que o pagamento confirmar.</p>
+      )}
     </form>
   )
 }
