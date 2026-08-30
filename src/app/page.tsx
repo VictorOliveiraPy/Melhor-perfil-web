@@ -17,6 +17,16 @@ import { resolveLaunchCoupon } from '../lib/resolveLaunchCoupon'
 // HTML estático com board vazio "pra sempre").
 export const dynamic = 'force-dynamic'
 
+// Valor real colocado direto aqui a pedido do usuário (2026-08-30), pra não
+// bloquear teste/lançamento em configurar NEXT_PUBLIC_LAUNCH_COUPON_CODE no
+// Vercel antes — precisa bater com o default de
+// Settings.launch_coupon_code no melhorperfil-api (app/core/config.py).
+// Setar a env var no Vercel continua funcionando normalmente (sobrescreve
+// este fallback); trocar o código da campanha só exige mudar num lugar só
+// (a env var), sem precisar mexer em código de novo, contanto que os dois
+// repos usem o mesmo valor.
+const DEFAULT_LAUNCH_COUPON_CODE = 'LANCAMENTO15'
+
 // Produto focado só em Instagram (decisão do usuário, 2026-08-25) — LinkedIn
 // removido de vez da UI (/linkedin, /board combinado, toggle de plataforma
 // no formulário). O backend continua aceitando URL do LinkedIn sem
@@ -36,7 +46,7 @@ export default async function Home() {
   // este repo. Sem as duas env vars configuradas com o MESMO valor, ou
   // sem o cupom ativado administrativamente, resolveLaunchCoupon devolve
   // null e nem o banner nem o toggle no formulário aparecem.
-  const launchCoupon = resolveLaunchCoupon(couponStatus, process.env.NEXT_PUBLIC_LAUNCH_COUPON_CODE)
+  const launchCoupon = resolveLaunchCoupon(couponStatus, process.env.NEXT_PUBLIC_LAUNCH_COUPON_CODE ?? DEFAULT_LAUNCH_COUPON_CODE)
 
   return (
     <main className="landing-shell">
