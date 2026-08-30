@@ -2,11 +2,13 @@ import BoardSection from '../components/BoardSection'
 import HeroBidForm from '../components/HeroBidForm'
 import { fetchSiteAnalytics } from '../services/himetricaAnalytics'
 import { fetchBoardListings } from '../services/boardApiService'
+import { fetchLaunchCouponStatus } from '../services/launchCouponService'
 import { HIMETRICA_SHARE_URL } from '../lib/himetricaShareUrl'
 import { boardStats } from '../lib/boardStats'
 import { rankListings } from '../lib/rankListings'
 import { heroTargetBidCents } from '../lib/heroTargetBidCents'
 import { formatCurrency } from '../lib/formatCurrency'
+import { resolveLaunchCoupon } from '../lib/resolveLaunchCoupon'
 
 // Precisa buscar o board antes de montar a hero (o valor mostrado depende
 // do maior lance atual — ver heroTargetBidCents) e depender de dado ao vivo
@@ -20,10 +22,21 @@ export const dynamic = 'force-dynamic'
 // no formulário). O backend continua aceitando URL do LinkedIn sem
 // problema; só não tem mais nenhuma tela que publique lá.
 export default async function Home() {
-  const [listings, analytics] = await Promise.all([fetchBoardListings('instagram'), fetchSiteAnalytics()])
+  const [listings, analytics, couponStatus] = await Promise.all([
+    fetchBoardListings('instagram'),
+    fetchSiteAnalytics(),
+    fetchLaunchCouponStatus(),
+  ])
   const ranked = rankListings(listings)
   const { totalClicks, topBidCents } = boardStats(ranked)
   const heroAmountCents = heroTargetBidCents([topBidCents])
+  // NEXT_PUBLIC_LAUNCH_COUPON_CODE precisa bater com LAUNCH_COUPON_CODE do
+  // melhorperfil-api — o backend nunca devolve o código em si (só o
+  // status agregado), de propósito, então quem anuncia o texto exato é
+  // este repo. Sem as duas env vars configuradas com o MESMO valor, ou
+  // sem o cupom ativado administrativamente, resolveLaunchCoupon devolve
+  // null e nem o banner nem o toggle no formulário aparecem.
+  const launchCoupon = resolveLaunchCoupon(couponStatus, process.env.NEXT_PUBLIC_LAUNCH_COUPON_CODE)
 
   return (
     <main className="landing-shell">
@@ -58,12 +71,22 @@ export default async function Home() {
         </div>
       </section>
 
+      {launchCoupon && (
+        <div className="launch-coupon-banner" role="status">
+          <span className="launch-coupon-banner-badge">🎉 Lançamento</span>
+          <p>
+            As primeiras <strong>15 vagas</strong> entram <strong>grátis</strong> no ranking — sem pagar nada. Restam{' '}
+            <strong>{launchCoupon.remaining}</strong> {launchCoupon.remaining === 1 ? 'vaga' : 'vagas'}.
+          </p>
+        </div>
+      )}
+
       <h1 className="hero-heading">
         <span>Pegue o número #1 por</span> <span className="sparkle" aria-hidden>·</span>{' '}
         <span className="gradient-amount">{formatCurrency(heroAmountCents)}</span> <span className="sparkle" aria-hidden>·</span>
       </h1>
 
-      <HeroBidForm />
+      <HeroBidForm launchCoupon={launchCoupon} />
 
       <p className="subtext">
         Já está na lista? Cola o mesmo link e aumenta o lance. Você paga só a diferença.

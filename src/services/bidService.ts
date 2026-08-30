@@ -30,12 +30,21 @@ export type BidResult = {
 // aqui NÃO caem em fallback silencioso: uma rejeição de negócio (ex.:
 // valor abaixo do mínimo, reforço que não aumenta o lance) precisa chegar
 // ao usuário com a mensagem real do backend (ver httpClient.postJson, que
-// já extrai o "detail" do erro).
+// já extrai o "detail" do erro, inclusive o "reason" estruturado dos erros
+// de cupom — ver HttpError.reason).
+//
+// couponCode (spec.md do melhorperfil-api, seção 9, "Cupom de lançamento"):
+// opcional — quando preenchido, o backend pula a cobrança Pix inteira
+// (BidResult.paymentStatus volta "cortesia", pixQrCode/pixQrCodeBase64
+// vazios) e ativa a entrada na hora. amountCents continua obrigatório no
+// tipo só por retrocompatibilidade de assinatura; o backend ignora o valor
+// quando coupon_code vem preenchido (sempre usa o mínimo vigente).
 export async function submitBid(
   profileUrl: string,
   platform: Platform,
   amountCents: number,
   isOwner: boolean,
+  couponCode?: string,
 ): Promise<BidResult> {
-  return postJson<BidResult>('/api/listings/bid', { profileUrl, platform, amountCents, isOwner })
+  return postJson<BidResult>('/api/listings/bid', { profileUrl, platform, amountCents, isOwner, couponCode })
 }

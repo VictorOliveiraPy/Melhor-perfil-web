@@ -238,6 +238,66 @@ textarea {
 /* Título com o valor do lance embutido em gradiente inline, igual ao
    melhorlance.dev — substitui o stepper +/- decorativo que tínhamos antes
    (nunca era funcional; a referência também não tem um). */
+/* Banner do cupom de lançamento (bootstrap de tráfego, spec.md do
+   melhorperfil-api seção 9) — só aparece quando resolveLaunchCoupon()
+   devolve algo (cupom ativado, com vaga, código configurado neste repo).
+   Gradiente reaproveita as duas cores já usadas em .gradient-amount
+   (--accent/--quente), pra parecer parte do mesmo sistema visual em vez
+   de um banner de terceiro coladO por cima. */
+.launch-coupon-banner {
+  margin-top: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 10px 16px;
+  border-radius: var(--radius-md);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--quente) 100%);
+  color: #fff;
+}
+
+.launch-coupon-banner p {
+  margin: 0;
+  font-size: 0.86rem;
+}
+
+.launch-coupon-banner-badge {
+  flex: none;
+  padding: 3px 10px;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.22);
+  font-size: 0.72rem;
+  font-weight: 800;
+  letter-spacing: 0.02em;
+}
+
+.hero-coupon-free-badge {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 58px;
+  border: 1px dashed var(--accent-tonal-border);
+  border-radius: var(--radius-md);
+  background: var(--accent-tonal-bg);
+  color: var(--accent);
+  font-weight: 700;
+  font-size: 0.9rem;
+}
+
+.hero-coupon-toggle {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 10px;
+  font-size: 0.8rem;
+  color: var(--text);
+  font-weight: 600;
+}
+
+.hero-coupon-toggle input {
+  width: auto;
+}
+
 .hero-heading {
   margin: 22px 0 0;
   font-family: var(--font-display);

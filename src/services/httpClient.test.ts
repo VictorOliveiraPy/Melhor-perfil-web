@@ -84,4 +84,42 @@ describe('postJson', () => {
     expect(error).toBeInstanceOf(HttpError)
     expect(error.message).toBe('Bid amount must be a whole number of reais')
   })
+
+  it('should expose a stable "reason" when the backend detail is a structured object', async () => {
+    // Given: erro de cupom (melhorperfil-api) devolve
+    // detail={message, reason} em vez de detail=string — sem extrair os
+    // dois campos separados, o caller só enxergaria "[object Object]" e
+    // perderia o "reason" machine-readable que distingue código inválido
+    // de cupom esgotado/não ativado/rate limit.
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({
+        ok: false,
+        status: 400,
+        json: () => Promise.resolve({ detail: { message: 'Cupom esgotado', reason: 'cupom_esgotado' } }),
+      }),
+    )
+
+    // When
+    const error = await postJson('/api/listings/bid', {}).catch((err) => err)
+
+    // Then
+    expect(error).toBeInstanceOf(HttpError)
+    expect(error.message).toBe('Cupom esgotado')
+    expect(error.reason).toBe('cupom_esgotado')
+  })
+
+  it('should leave "reason" undefined when the backend detail is a plain string', async () => {
+    // Given
+    vi.stubGlobal(
+      'fetch',
+      vi.fn().mockResolvedValue({ ok: false, status: 400, json: () => Promise.resolve({ detail: 'Listing not found' }) }),
+    )
+
+    // When
+    const error = await postJson('/api/listings/bid', {}).catch((err) => err)
+
+    // Then
+    expect(error.reason).toBeUndefined()
+  })
 })
