@@ -3,6 +3,9 @@ import BidForm from './BidForm'
 import { fetchBoardListings } from '../services/boardApiService'
 import { rankListings } from '../lib/rankListings'
 import { boardStats } from '../lib/boardStats'
+import { buildBoardJsonLd } from '../lib/boardJsonLd'
+import { stringifyJsonLd } from '../lib/stringifyJsonLd'
+import { SITE_URL } from '../lib/siteUrl'
 import type { Platform } from '../lib/platform'
 
 type Props = {
@@ -24,10 +27,18 @@ const PLATFORM_LABEL: Record<Platform, string> = {
 // aninhado dentro de uma page.tsx síncrona.
 export default async function Board({ platform, heading }: Props) {
   const listings = await fetchBoardListings(platform)
-  const { totalClicks, topBidCents } = boardStats(rankListings(listings))
+  const ranked = rankListings(listings)
+  const { totalClicks, topBidCents } = boardStats(ranked)
+  // Dado estruturado (schema.org ItemList) — ajuda o Google a entender a
+  // página como uma lista ranqueada, não texto solto (src/lib/boardJsonLd.ts,
+  // testado). Só as primeiras 50 entradas (uma página), mesmo limite já
+  // usado pelo board em si — nunca lista mais do que está realmente
+  // visível na página.
+  const jsonLd = buildBoardJsonLd(ranked, SITE_URL, platform)
 
   return (
     <main className="board-page">
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: stringifyJsonLd(jsonLd) }} />
       <div className="board-topbar">
         <div>
           <p className="eyebrow">Board · {PLATFORM_LABEL[platform]}</p>

@@ -3,9 +3,21 @@ import type { ReactNode } from 'react'
 import Script from 'next/script'
 import { fontDisplay, fontMono, fontSans } from './fonts'
 import { SITE_URL } from '../lib/siteUrl'
+import { stringifyJsonLd } from '../lib/stringifyJsonLd'
 import ServiceWorkerRegistration from '../components/ServiceWorkerRegistration'
 import InstallPwaBanner from '../components/InstallPwaBanner'
 import './globals.css'
+
+// Dado estruturado (schema.org WebSite) — sitewide, estático (sem dado
+// dinâmico, por isso direto aqui em vez de extraído/testado como os
+// outros JSON-LD do site). Ajuda o Google a identificar o site como uma
+// entidade única (nome/URL canônicos), base pra sitelinks na busca.
+const WEBSITE_JSON_LD = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'melhorperfil',
+  url: SITE_URL,
+}
 
 const TITLE = 'melhorperfil — dispute o topo do ranking de perfis do Instagram'
 const DESCRIPTION =
@@ -58,6 +70,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="pt-BR" className={`${fontDisplay.variable} ${fontSans.variable} ${fontMono.variable}`}>
       <body>
+        <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: stringifyJsonLd(WEBSITE_JSON_LD) }} />
         <header className="site-header">
           <div className="container shell-header">
             <a className="brand-wrap" href="/" aria-label="melhorperfil, início">
